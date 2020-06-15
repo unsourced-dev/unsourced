@@ -1,0 +1,27 @@
+.space-v-1 > * {
+  margin-bottom: 0.25rem;
+}
+
+.space-v-2 > * {
+  margin-bottom: 0.5rem;
+}
+
+.space-v-4 > * {
+  margin-bottom: 1rem;
+}
+
+.space-v-6 > * {
+  margin-bottom: 1.5rem;
+}
+
+.space-v-8 > * {
+  margin-bottom: 2rem;
+}
+
+.space-v-12 > * {
+  margin-bottom: 3rem;
+}
+
+.space-v-16 > * {
+  margin-bottom: 4rem;
+}

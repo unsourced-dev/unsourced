@@ -1,0 +1,27 @@
+.space-h-1 > * {
+  margin-right: 0.25rem;
+}
+
+.space-h-2 > * {
+  margin-right: 0.5rem;
+}
+
+.space-h-4 > * {
+  margin-right: 1rem;
+}
+
+.space-h-6 > * {
+  margin-right: 1.5rem;
+}
+
+.space-h-8 > * {
+  margin-right: 2rem;
+}
+
+.space-h-12 > * {
+  margin-right: 3rem;
+}
+
+.space-h-16 > * {
+  margin-right: 4rem;
+}
