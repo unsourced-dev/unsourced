@@ -132,6 +132,8 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   async function signIn(payload: SignInPayload): Promise<SignInResult> {
     const { email, password, keepMeSignedIn } = payload
 
+    setUser(null)
+    setUserInCache(null)
     await logger.setLoading(true)
     try {
       await auth().setPersistence(keepMeSignedIn ? auth.Auth.Persistence.LOCAL : auth.Auth.Persistence.SESSION)
@@ -147,6 +149,8 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   async function signUp(payload: SignUpPayload<U>): Promise<SignUpResult> {
     const { email, password, keepMeSignedIn } = payload
 
+    setUser(null)
+    setUserInCache(null)
     logger.setLoading(true)
     isSigningUp = true
     let credentials: firebase.auth.UserCredential = null
