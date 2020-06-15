@@ -5,7 +5,7 @@ import React from "react"
 import { deleteFile, getFilePath, uploadBlob, uploadFile } from "../firebase/storage"
 import { FormHook, useErrorMessage, useFormFromContext } from "../form"
 import { guid } from "../utils/guid"
-import { useLogger } from "../utils/useLogger"
+import { LoggerHook, useLogger } from "../utils/useLogger"
 import { Button } from "./Button"
 import { FormFieldError } from "./FormFieldError"
 import { FormFieldHint } from "./FormFieldHint"
@@ -138,7 +138,7 @@ export interface MediaFileHook {
 
 export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>): MediaFileHook {
   const { name, folder, preserve, maxImages, hd } = payload
-
+  const canceling = React.useRef<boolean>(false)
   const logger = useLogger()
   const values = getValues(form, name, maxImages)
   const statuses = getStatuses(values)
@@ -158,7 +158,7 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
     form.setFieldValue(name, replaceLastItem(values, { loading: true, size: file.size, path }), false)
     form.setFieldError(name, undefined)
 
-    console.log("Start uploading at path " + path)
+    // console.log("Start uploading at path " + path)
     try {
       if (
         file.size < MAX_UNCOMPRESSED_FILE_SIZE ||
@@ -181,18 +181,18 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
           },
         }
 
-        if (values.length > 0 && values[values.length - 1].path === path) {
+        if (canceling.current) {
+          // cancelled, delete the file in the background
+          deleteFile(path)
+          // console.log("Cancelled, deleting file!")
+        } else {
           form.setFieldValue(name, replaceLastItem(values, value), false)
           // submit the document if editing
           if (form.document && form.document.exists) {
             await form.submitForm()
           }
           logger.setLoading(false)
-          console.log("Done uploading")
-        } else {
-          // cancelled, delete the file in the background
-          deleteFile(path)
-          console.log("Cancelled, deleting file!")
+          // console.log("Done uploading")
         }
         return
       }
@@ -232,7 +232,7 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
             const ext = ".jpg"
             const path = folderName + name + ext
             console.time("Uploading image width: " + width + "  size: " + blob.size)
-            const uploaded = await uploadBlob({ blob, path })
+            const uploaded = await uploadBlob({ blob, path, contentType: "image/jpeg" })
             console.timeEnd("Uploading image width: " + width + "  size: " + blob.size)
             return {
               name: name + ext,
@@ -251,24 +251,19 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
         mimeType: "image/jpeg",
       }
 
-      // form.setFieldValue(name, replaceLastItem(values, media), false)
-      // if (form.document && form.document.exists) {
-      //   await form.submitForm()
-      // }
-      // logger.setLoading(false)
-
-      if (values.length > 0 && values[values.length - 1].path === path) {
+      if (canceling.current) {
+        // cancelled, delete the files in the background
+        srcSet.map((item) => deleteFile(item.path))
+        // console.log("Cancelled, deleting files!")
+        canceling.current = false
+      } else {
         form.setFieldValue(name, replaceLastItem(values, media), false)
         // submit the document if editing
         if (form.document && form.document.exists) {
           await form.submitForm()
         }
         logger.setLoading(false)
-        console.log("Done uploading")
-      } else {
-        // cancelled, delete the files in the background
-        srcSet.map((item) => deleteFile(item.path))
-        console.log("Cancelled, deleting files!")
+        // console.log("Done uploading")
       }
     } catch (err) {
       console.error("Error while uploading files: ", err)
@@ -279,6 +274,7 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
   }
 
   function cancelUpload(index: number) {
+    console.log("Canceling for index " + index)
     const value = values.map((m, i) => (i === index ? {} : m))
     const length = value.length
     if (length >= 2) {
@@ -289,6 +285,7 @@ export function useMediaFile(payload: MediaFileHookPayload, form: FormHook<any>)
       }
     }
     form.setFieldValue(name, value, false)
+    canceling.current = true
     logger.setLoading(false)
   }
 
@@ -364,7 +361,7 @@ function RawSingleMediaInput(props: RawSingleMediaInputProps) {
   switch (status) {
     case "file":
       return (
-        <div className="w-full relative">
+        <div className={"relative mr-2 " + (sizeFull ? "h-full w-full" : "h-20 w-20")}>
           <Button
             style="icon"
             className={
@@ -440,23 +437,25 @@ function RawSingleMediaInput(props: RawSingleMediaInputProps) {
 
     case "deleting":
       return (
-        <Button
-          style="icon"
-          className={"bg-white relative border rounded mr-2 " + +(sizeFull ? "h-full w-full" : "h-20 w-20")}
-          disabled
-        >
-          <img
-            className="object-cover h-full w-full rounded"
-            src={media.src.url}
-            srcSet={getSrcSet(media)}
-            alt="Uploaded image"
-            height={128}
-            width={128}
-            sizes={256 + "px"}
-            style={{ height: "inherit" }}
-          />
-          <Icon name="loading" size="xxlarge" className="absolute inset-0 m-2 opacity-75" />
-        </Button>
+        <div className={"relative mr-2 " + (sizeFull ? "h-full w-full" : "h-20 w-20")}>
+          <Button
+            style="icon"
+            className={"bg-white relative border rounded mr-2 " + (sizeFull ? "h-full w-full" : "h-20 w-20")}
+            disabled
+          >
+            <img
+              className="object-cover h-full w-full rounded"
+              src={media.src.url}
+              srcSet={getSrcSet(media)}
+              alt="Uploaded image"
+              height={128}
+              width={128}
+              sizes={256 + "px"}
+              style={{ height: "inherit" }}
+            />
+            <Icon name="loading" size="xxlarge" className="absolute inset-0 m-2 opacity-75" />
+          </Button>
+        </div>
       )
     case "empty":
     default:

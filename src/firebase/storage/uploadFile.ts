@@ -48,14 +48,16 @@ export async function uploadFile(file: File, options: UploadFileOptions): Promis
 export interface UploadBlobPayload {
   blob: Blob
   path: string
+  contentType?: string
 }
 
 export async function uploadBlob(payload: UploadBlobPayload) {
-  const { blob, path } = payload
+  const { blob, path, contentType } = payload
   const ref = firebase.storage().ref(path)
 
   await ref.put(blob, {
     cacheControl: "public,max-age=31536000",
+    contentType,
   })
   return ref.getDownloadURL().then((url) => ({ url, path }))
 }
