@@ -197,6 +197,8 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   function signOut() {
+    setUser(null)
+    setUserInCache(null)
     return auth().signOut()
   }
 
