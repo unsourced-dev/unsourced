@@ -1,8 +1,9 @@
 {
   "name": "unsourced",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "rimraf dist && rollup -c && tsc --emitDeclarationOnly",
     "start": "rollup -c -w",
     "tsc": "tsc --noEmit"
