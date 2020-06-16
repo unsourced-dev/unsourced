@@ -119,11 +119,11 @@ async function fetchDocuments<T>(docs: Docs, force: boolean): Promise<{ values: 
   const ids: StringMap<string> = {}
   await Promise.all(
     Object.keys(docs).map(async (key) => {
-      const [coll, id] = docs[key]
+      const [coll, id, optional] = docs[key]
       ids[key] = id
       const doc = await coll.get(id, force)
       values = setIn(values, key, doc)
-      if (typeof doc === "undefined") {
+      if (typeof doc === "undefined" && !optional) {
         notFound = true
       }
     })
@@ -185,8 +185,9 @@ export interface DocumentsHook<T> {
   refresh(): Promise<T | undefined>
 }
 
+/** key -> [collection, id, optional?] */
 export interface Docs {
-  [key: string]: [Collection<any>, string]
+  [key: string]: [Collection<any>, string, boolean?]
 }
 
 export function useDocuments<T>(docs: Docs, options: UseDocumentsOptions<T> = {}): DocumentsHook<T> {
