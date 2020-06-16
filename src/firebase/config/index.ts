@@ -1,9 +1,9 @@
 export interface FirebaseConfig {
   apiKey: string
-  authDomain: string
-  databaseURL: string
-  storageBucket: string
   projectId: string
+  authDomain?: string
+  databaseURL?: string
+  storageBucket?: string
   appId?: string
   functionsUrl?: string
 }
