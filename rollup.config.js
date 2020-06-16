@@ -80,14 +80,14 @@ export default [
     },
     output: [
       {
-        dir: "dist/esm",
+        dir: "dist/es",
         format: "esm",
-        chunkFileNames: "chunks/[name]-[hash].js",
+        chunkFileNames: "_chunks/[name]-[hash].js",
       },
       {
-        dir: "dist/cjs",
+        dir: "dist",
         format: "cjs",
-        chunkFileNames: "chunks/[name]-[hash].js",
+        chunkFileNames: "_chunks/[name]-[hash].js",
       },
     ],
     plugins: [
