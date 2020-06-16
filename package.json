@@ -10,10 +10,9 @@
   },
   "main": "dist/index.js",
   "module": "dist/es/index.js",
-  "typings": "dist/types/index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -58,6 +57,7 @@
     "rimraf": "3.0.2",
     "rollup": "2.15.0",
     "rollup-plugin-postcss": "^3.1.2",
+    "rollup-plugin-typescript2": "^0.27.1",
     "tailwindcss": "1.4.6",
     "typescript": "3.9.5"
   }
