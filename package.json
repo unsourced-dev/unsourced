@@ -1,6 +1,6 @@
 {
   "name": "unsourced",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "scripts": {
     "prepublish": "npm run build",
@@ -12,7 +12,7 @@
   "module": "dist/es5/index.js",
   "typings": "dist/types/index.d.ts",
   "files": [
-    "dist"
+    "dist/**/*.js"
   ],
   "repository": {
     "type": "git",
