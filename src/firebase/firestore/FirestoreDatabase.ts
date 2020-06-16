@@ -1,7 +1,6 @@
 import { getAuthHeaders } from "../functions"
-import { Transform } from "./transforms"
-import { FetchedDocument, Query } from "./types"
-import { decodeDocument, encodeFields, encodeQuery } from "./utils"
+import { FetchedDocument, Query, Transform, WithTransform } from "./types"
+import { decodeDocument, encodeFields, encodeQuery, isTransform } from "./utils"
 
 //
 // -----------------------------------------------------
@@ -40,7 +39,7 @@ function getFields(data: any, path?: string, result: string[] = []): string[] {
     const keyPath = path ? path + "." + key : key
     const value = data[key]
 
-    if (value instanceof Transform) continue
+    if (isTransform(value)) continue
 
     // if the key has dots in it, it contains an entire object to write.
     if (!key.includes(".") && value && typeof value === "object" && !Array.isArray(value)) {
@@ -60,10 +59,6 @@ function getFields(data: any, path?: string, result: string[] = []): string[] {
 //
 // -----------------------------------------------------
 //
-
-export type WithTransform<T> = {
-  [K in keyof T]: T[K] | Transform | WithTransform<T[K]>
-}
 
 export interface FirestoreDatabaseConfig {
   projectId: string
@@ -134,7 +129,7 @@ export class FirestoreDatabase {
         writes.push({
           transform: {
             document: this.getDocumentName(path),
-            fieldTransforms: transforms.map((t) => t.encoded),
+            fieldTransforms: transforms.map((t) => t.__encodedTransform),
           },
         })
       }

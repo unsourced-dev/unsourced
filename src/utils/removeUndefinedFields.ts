@@ -1,4 +1,4 @@
-import { Transform } from "../firebase/firestore/transforms"
+import { TransformImpl } from "../firebase/firestore/transforms"
 
 export function removeUndefinedFields<T = any>(value: T): T {
   switch (typeof value) {
@@ -10,7 +10,7 @@ export function removeUndefinedFields<T = any>(value: T): T {
     case "symbol":
       return value
     case "object":
-      if (value instanceof Transform) {
+      if (value instanceof TransformImpl) {
         return value
       } else if (Array.isArray(value)) {
         return value.filter((v) => v !== undefined).map(removeUndefinedFields) as any

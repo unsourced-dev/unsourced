@@ -2,8 +2,7 @@ import { removeUndefinedFields } from "../../utils/removeUndefinedFields"
 import { deleteInCache, getFromCache, setInCache } from "./cache"
 import { computeDiff } from "./computeDiff"
 import { firestore } from "./firestore"
-import { Transform } from "./transforms"
-import { FetchedDocument, Query } from "./types"
+import { FetchedDocument, Query, WithTransform } from "./types"
 
 //
 // -----------------------------------------------------
@@ -28,10 +27,6 @@ export async function unapply(data: any, mutations: Mutation[]): Promise<any> {
     result = await mutation.unapply(result)
   }
   return result
-}
-
-export type WithTransform<T> = {
-  [K in keyof T]: T[K] | Transform | WithTransform<T[K]>
 }
 
 //

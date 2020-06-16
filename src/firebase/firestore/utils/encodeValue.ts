@@ -1,6 +1,6 @@
 import { setIn } from "formik"
 
-import { Transform } from "../transforms"
+import { Transform } from "../types"
 
 function canBeConvertedToValue(data: any): boolean {
   switch (typeof data) {
@@ -18,6 +18,10 @@ function appendToPath(path: string, segment: string | number): string {
   return path + "." + segment
 }
 
+export function isTransform(data: any): data is Transform {
+  return data && typeof data.__encodedTransform === "object"
+}
+
 /**
  * Converts the given javascript value (string, boolean, object, array...) to a value that can be sent to Firestore's REST API.
  *
@@ -26,8 +30,8 @@ function appendToPath(path: string, segment: string | number): string {
  * @see https://cloud.google.com/firestore/docs/reference/rest/v1/Value
  */
 export function encodeValue(data: any, transforms?: Transform[], path: string = ""): any {
-  if (data instanceof Transform) {
-    data.encoded.fieldPath = path
+  if (isTransform(data)) {
+    data.__encodedTransform.fieldPath = path
     if (transforms) {
       transforms.push(data)
     }

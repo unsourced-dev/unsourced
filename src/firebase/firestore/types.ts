@@ -42,3 +42,12 @@ export interface FetchedDocumentInfo {
 export type FetchedDocument = {
   ___doc___: FetchedDocumentInfo
 }
+
+export interface Transform {
+  /** The encoded transformation to send firebase. */
+  __encodedTransform: any
+}
+
+export type WithTransform<T> = {
+  [K in keyof T]: T[K] | Transform | WithTransform<T[K]>
+}

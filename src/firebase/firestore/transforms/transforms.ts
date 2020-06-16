@@ -1,3 +1,4 @@
+import { Transform } from "../types"
 import { encodeValue } from "../utils"
 
 function isNumber(v) {
@@ -42,9 +43,9 @@ export type TransformType =
    */
   | "removeFromArray"
 
-export class Transform {
+export class TransformImpl implements Transform {
   // the piece of JSON that gets sent to firebase as part of the request.
-  public encoded: any = {}
+  public __encodedTransform: any = {}
 
   constructor(public type: TransformType, value?: number | any[]) {
     if (!(type in transformsMap)) throw Error(`Invalid transform name: "${type}"`)
@@ -55,28 +56,28 @@ export class Transform {
         `The value for the transform "${type}" needs to be a${validator === isNumber ? " number" : "n array"}.`
       )
 
-    if (validator === Array.isArray) this.encoded[transformName] = encodeValue(value).arrayValue
-    else this.encoded[transformName] = name === "serverTimestamp" ? "REQUEST_TIME" : encodeValue(value)
+    if (validator === Array.isArray) this.__encodedTransform[transformName] = encodeValue(value).arrayValue
+    else this.__encodedTransform[transformName] = name === "serverTimestamp" ? "REQUEST_TIME" : encodeValue(value)
   }
 }
 
 export const Transforms = {
   serverTimestamp() {
-    return new Transform("serverTimestamp")
+    return new TransformImpl("serverTimestamp")
   },
   increment(value: number) {
-    return new Transform("increment", value)
+    return new TransformImpl("increment", value)
   },
   min(value: number) {
-    return new Transform("min", value)
+    return new TransformImpl("min", value)
   },
   may(value: number) {
-    return new Transform("max", value)
+    return new TransformImpl("max", value)
   },
   appendToArray(values: any[]) {
-    return new Transform("appendToArray", values)
+    return new TransformImpl("appendToArray", values)
   },
   removeFromArray(values: any[]) {
-    return new Transform("removeFromArray", values)
+    return new TransformImpl("removeFromArray", values)
   },
 }
