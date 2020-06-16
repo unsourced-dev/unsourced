@@ -2,7 +2,7 @@ import commonjs from "@rollup/plugin-commonjs"
 import resolve from "@rollup/plugin-node-resolve"
 import babel from "@rollup/plugin-babel"
 import postcss from "rollup-plugin-postcss"
-import typescript from "rollup-plugin-typescript2"
+import dts from "rollup-plugin-dts"
 import pkg from "./package.json"
 
 const extensions = [".js", ".jsx", ".ts", ".tsx"]
@@ -78,15 +78,24 @@ const input = {
   "ui/TruncatedText": "src/ui/TruncatedText.tsx",
 }
 
+function getTypesInputs() {
+  const result = {}
+  Object.keys(input).forEach((key) => {
+    result[key] = input[key].replace(/\.tsx?/, ".d.ts").replace("src/", "lib/")
+  })
+  return result
+}
+
 export default [
   {
     input,
     output: [
-      {
-        dir: "dist/es",
-        format: "esm",
-        chunkFileNames: "_chunks/[name]-[hash].js",
-      },
+      // no es bundle for now
+      // {
+      //   dir: "dist/es",
+      //   format: "esm",
+      //   chunkFileNames: "_chunks/[name]-[hash].js",
+      // },
       {
         dir: "dist",
         format: "cjs",
@@ -101,7 +110,7 @@ export default [
       // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
       commonjs(),
       postcss(),
-      typescript(),
+      // typescript(),
       babel({
         babelHelpers: "runtime",
         extensions,
@@ -113,5 +122,14 @@ export default [
     external: makeExternalPredicate(
       Object.keys(pkg.peerDependencies || {}).concat(Object.keys(pkg.dependencies || {}))
     ),
+  },
+  {
+    input: getTypesInputs(),
+    output: {
+      dir: "dist",
+      format: "cjs",
+      chunkFileNames: "_chunks/[name]-[hash].js",
+    },
+    plugins: [postcss(), dts({})],
   },
 ]

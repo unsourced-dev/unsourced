@@ -4,8 +4,7 @@
   "license": "MIT",
   "scripts": {
     "npm:publish": "npm run build && cp package.json dist/package.json && npm publish dist",
-    "build": "rimraf dist && rollup -c && tsc --emitDeclarationOnly",
-    "start": "rollup -c -w",
+    "build": "rimraf dist && rimraf lib && tsc && cpx \"src/**/*.css\" lib && rollup -c",
     "tsc": "tsc --noEmit"
   },
   "main": "./index.js",
@@ -48,6 +47,7 @@
     "@rollup/plugin-node-resolve": "8.0.1",
     "@types/react": "16.9.36",
     "classnames": "2.2.6",
+    "cpx": "1.5.0",
     "firebase": "7.15.0",
     "formik": "2.1.4",
     "next": "9.4.4",
@@ -56,8 +56,8 @@
     "react-dom": "16.13.1",
     "rimraf": "3.0.2",
     "rollup": "2.15.0",
-    "rollup-plugin-postcss": "^3.1.2",
-    "rollup-plugin-typescript2": "^0.27.1",
+    "rollup-plugin-dts": "1.4.7",
+    "rollup-plugin-postcss": "3.1.2",
     "tailwindcss": "1.4.6",
     "typescript": "3.9.5"
   }
