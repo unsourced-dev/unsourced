@@ -29,6 +29,7 @@ const input = {
   "firebase/storage": "src/firebase/storage/index.ts",
   "form/index": "src/form/index.ts",
   "form/file": "src/form/file/index.ts",
+  logger: "src/logger/index.ts",
   "nanocss/index": "src/nanocss/index.ts",
   "ui/Button": "src/ui/Button.tsx",
   "ui/Card": "src/ui/Card.tsx",

@@ -1,7 +1,7 @@
 import React from "react"
 
 import { useFormFromContext } from "../form"
-import { useLogger } from "../utils/useLogger"
+import { useLogger } from "../logger/useLogger"
 import { Button, ButtonStyle } from "./Button"
 
 export interface SubmitButtonProps {

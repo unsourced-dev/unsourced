@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { createContainer } from "unstated-next"
 
-import { guid } from "./guid"
+import { guid } from "../utils/guid"
 
 export interface Notification {
   text: string
