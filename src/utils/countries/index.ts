@@ -1,6 +1,6 @@
 // extracted from https://github.com/michaelwittig/node-i18n-iso-countries/blob/master/langs/en.json
 
-const COUNTRY_MAP = {
+export const COUNTRY_MAP = {
   locale: "en",
   countries: {
     AF: "Afghanistan",

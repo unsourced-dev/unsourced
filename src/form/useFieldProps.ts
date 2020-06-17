@@ -1,6 +1,6 @@
 import { getIn } from "formik"
 
-import { useLogger } from "../logger/useLogger"
+import { useLogger } from "../utils/logger/useLogger"
 import { FormHook } from "./useForm"
 
 export interface GetFieldPropsPayload<Value> {

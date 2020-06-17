@@ -3,7 +3,7 @@ import "firebase/auth"
 import { auth, User } from "firebase/app"
 import { useEffect, useRef, useState } from "react"
 
-import { useLogger } from "../../logger/useLogger"
+import { useLogger } from "../../utils/logger/useLogger"
 import { FirebaseConfig } from "../config"
 import { initialize } from "../init/initialize"
 import { isFirebaseInitialized } from "../init/isFirebaseInitialized"

@@ -2,7 +2,7 @@ import "./Notifications.css"
 
 import React from "react"
 
-import { Notification, useLogger } from "../logger/useLogger"
+import { Notification, useLogger } from "../utils/logger/useLogger"
 import { Column } from "./Column"
 
 function getClassName(notification: Notification) {

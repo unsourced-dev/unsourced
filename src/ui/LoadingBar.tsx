@@ -2,7 +2,7 @@ import "./LoadingBar.css"
 
 import React from "react"
 
-import { useLogger } from "../logger/useLogger"
+import { useLogger } from "../utils/logger/useLogger"
 
 export interface LoadingBarProps {
   className?: string

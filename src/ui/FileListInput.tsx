@@ -4,7 +4,7 @@ import React from "react"
 
 import { deleteFile as deleteFileFirebase, uploadFile } from "../firebase/storage"
 import { FormHook, useErrorMessage, useFormFromContext } from "../form"
-import { useLogger } from "../logger/useLogger"
+import { useLogger } from "../utils/logger/useLogger"
 import { FileDef } from "./FileInput"
 import { FormFieldError } from "./FormFieldError"
 import { FormFieldHint } from "./FormFieldHint"

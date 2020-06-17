@@ -1,8 +1,8 @@
 import { ChangeEvent } from "react"
 
 import { deleteFile as deleteFileFirebase, uploadFile } from "../../firebase/storage"
-import { useLogger } from "../../logger/useLogger"
 import { FileDef } from "../../ui/FileInput"
+import { useLogger } from "../../utils/logger/useLogger"
 import { useFieldProps } from "../useFieldProps"
 import { FormHook } from "../useForm"
 

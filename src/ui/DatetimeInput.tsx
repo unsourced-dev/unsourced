@@ -4,8 +4,8 @@ import React from "react"
 import InputMask from "react-input-mask"
 
 import { FormHook, useErrorMessage, useFormFromContext } from "../form"
-import { useLogger } from "../logger/useLogger"
 import { datetimeToString, parseDatetime, parseTime, timeToString } from "../utils/date"
+import { useLogger } from "../utils/logger/useLogger"
 import { FormFieldError } from "./FormFieldError"
 import { FormFieldHint } from "./FormFieldHint"
 import { FormFieldLabel } from "./FormFieldLabel"
@@ -69,16 +69,16 @@ export interface FieldProps {
   disabled?: boolean
 }
 
-function localToUTC2(datetime: string, type: DateTimeType): string {
+function localToUTC(datetime: string, type: DateTimeType): string {
   try {
     switch (type) {
       case "date":
         return datetime
       case "datetime":
-        const date = parseDatetime(datetime, "local", "UTC+2")
+        const date = parseDatetime(datetime, "local", "UTC")
         return datetimeToString(date)
       case "time":
-        const time = parseTime(datetime, "local", "UTC+2")
+        const time = parseTime(datetime, "local", "UTC")
         return timeToString(time)
     }
   } catch (_) {
@@ -87,16 +87,16 @@ function localToUTC2(datetime: string, type: DateTimeType): string {
   }
 }
 
-function localFromUTC2(datetime: string, type: DateTimeType): string {
+function localFromUTC(datetime: string, type: DateTimeType): string {
   try {
     switch (type) {
       case "date":
         return datetime
       case "datetime":
-        const date = parseDatetime(datetime, "UTC+2", "local")
+        const date = parseDatetime(datetime, "UTC", "local")
         return datetimeToString(date)
       case "time":
-        const time = parseTime(datetime, "UTC+2", "local")
+        const time = parseTime(datetime, "UTC", "local")
         return timeToString(time)
     }
   } catch (_) {
@@ -109,9 +109,9 @@ export function useFieldProps(form: FormHook<any>, options: GetFieldPropsPayload
   const logger = useLogger()
   const { name, disabled } = options
 
-  const value = localFromUTC2(getIn(form.values, name), options.type)
+  const value = localFromUTC(getIn(form.values, name), options.type)
   const onChange = (e: any) => {
-    const toSet = localToUTC2(e.target.value, options.type)
+    const toSet = localToUTC(e.target.value, options.type)
     form.setFieldValue(name, toSet)
   }
 

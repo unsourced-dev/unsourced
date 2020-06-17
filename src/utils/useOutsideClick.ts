@@ -7,7 +7,7 @@ import { MutableRefObject, useCallback, useEffect, useRef } from "react"
  * Use this to detect the click outside of a component.
  * Useful for all sorts of dropdowns or modals to close when clicked outside.
  *
- * See `common/components/TagListInput.tsx` for an example use.
+ * See `ui/TagListInput.tsx` for an example use.
  */
 export function useOutsideClick(onClick: () => any): MutableRefObject<any> {
   const ref = useRef(null)

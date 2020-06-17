@@ -49,13 +49,13 @@ export function dateToString(date: Date): string {
 
 function convertTimezone(date: Date, fromTimezone: Timezone, toTimezone: Timezone) {
   if (fromTimezone !== toTimezone) {
-    if (toTimezone === "UTC+2") {
-      // local -> UTC+2
+    if (toTimezone === "UTC") {
+      // local -> UTC
       // local + offset = UTC
-      date.setMinutes(date.getMinutes() + date.getTimezoneOffset() + 120)
+      date.setMinutes(date.getMinutes() + date.getTimezoneOffset())
     } else {
-      // UTC+2 -> local
-      date.setMinutes(date.getMinutes() - 120 - date.getTimezoneOffset())
+      // UTC -> local
+      date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
     }
   }
   return date
@@ -91,7 +91,7 @@ export function parseDate(date: string): Date {
   }
 }
 
-export type Timezone = "UTC+2" | "local"
+export type Timezone = "UTC" | "local"
 
 /** Parses "hh:mm" */
 export function parseTime(time: string, fromTimezone: Timezone = "local", toTimezone: Timezone = "local"): Date {
@@ -100,7 +100,7 @@ export function parseTime(time: string, fromTimezone: Timezone = "local", toTime
   return result
 }
 
-/** Parses "DD-MM-YYYY hh:mm" expected to be in UTC+2*/
+/** Parses "DD-MM-YYYY hh:mm" */
 export function parseDatetime(
   datetime: string,
   fromTimezone: Timezone = "local",

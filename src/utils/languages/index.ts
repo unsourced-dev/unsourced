@@ -1,7 +1,7 @@
 // complete list https://github.com/annexare/Countries/blob/master/data/languages.json
 // using this reduced list http://stevehardie.com/2009/10/list-of-common-languages/
 
-import { StringMap } from "../types"
+import { StringMap } from "../../types"
 
 const _languagesByKey = {
   en: {

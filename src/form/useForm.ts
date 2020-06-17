@@ -3,8 +3,8 @@ import {
 } from "formik"
 import { ChangeEvent, FormEvent, useMemo } from "react"
 
-import { LoggerHook, useLogger } from "../logger/useLogger"
 import { StringMap } from "../types"
+import { LoggerHook, useLogger } from "../utils/logger/useLogger"
 import { useConfirmOnLeave } from "../utils/useConfirmOnLeave"
 
 export interface SubmitError {
