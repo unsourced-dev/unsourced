@@ -1,6 +1,6 @@
 import { getIn } from "formik"
 
-import { FormHook } from "./useForm"
+import { FormHook } from "./types"
 
 export interface UseErrorMessagePayload {
   form?: FormHook<any>

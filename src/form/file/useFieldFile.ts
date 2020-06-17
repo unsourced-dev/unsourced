@@ -3,8 +3,8 @@ import { ChangeEvent } from "react"
 import { deleteFile as deleteFileFirebase, uploadFile } from "../../firebase/storage"
 import { FileDef } from "../../ui/FileInput"
 import { useLogger } from "../../utils/logger/useLogger"
+import { FormHook } from "../types"
 import { useFieldProps } from "../useFieldProps"
-import { FormHook } from "../useForm"
 
 export type FileFieldHookStatus = "empty" | "loading" | "deleting" | "file"
 

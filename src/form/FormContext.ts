@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react"
 
-import { FormHook } from "./useForm"
+import { FormHook } from "./types"
 
 export const FormContext = createContext<FormHook>(null)
 

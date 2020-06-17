@@ -1,7 +1,7 @@
 import { getIn } from "formik"
 import { useCallback } from "react"
 
-import { FormHook } from "./useForm"
+import { FormHook } from "./types"
 
 export interface FieldArrayHook<T> {
   form: FormHook<any>

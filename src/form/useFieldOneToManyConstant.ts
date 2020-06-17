@@ -3,7 +3,7 @@ import { useMemo, useState } from "react"
 
 import { StringMap } from "../types"
 import { getWords } from "../utils/keywords"
-import { FormHook } from "./useForm"
+import { FormHook } from "./types"
 
 export function filterSelectOptions(values: ConstantValue[], text: string): ConstantValue[] {
   if (!text) return values

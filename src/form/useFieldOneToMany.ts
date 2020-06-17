@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { FormHook } from "./useForm"
+import { FormHook } from "./types"
 
 export interface FieldOneToManyHook<Value, FormValue> {
   values: Value[]
