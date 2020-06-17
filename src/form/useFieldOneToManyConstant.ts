@@ -1,9 +1,9 @@
 import { getIn } from "formik"
 import { useMemo, useState } from "react"
 
-import { FormHook } from "../form"
 import { StringMap } from "../types"
 import { getWords } from "../utils/keywords"
+import { FormHook } from "./useForm"
 
 export function filterSelectOptions(values: ConstantValue[], text: string): ConstantValue[] {
   if (!text) return values
