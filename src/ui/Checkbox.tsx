@@ -9,14 +9,14 @@ import { useTheme } from "./Theme"
 export interface CheckboxProps {
   value?: boolean
   name?: string
-  label?: string
+  label?: React.ReactNode
   disabled?: boolean
   setValue?(value: boolean)
-  error?: string
+  error?: React.ReactNode
   className?: string
   inputClassName?: string
   labelClassName?: string
-  hint?: string
+  hint?: React.ReactNode
   children?: any
 }
 

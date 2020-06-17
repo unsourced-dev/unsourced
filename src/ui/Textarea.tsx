@@ -12,9 +12,9 @@ export interface TextareaProps {
   value?: string
   disabled?: boolean
   setValue?(value: string, e: React.ChangeEvent<HTMLTextAreaElement>)
-  label?: string
-  error?: string
-  hint?: string
+  label?: React.ReactNode
+  error?: React.ReactNode
+  hint?: React.ReactNode
   className?: string
   rows?: number
   autoFocus?: boolean

@@ -13,10 +13,10 @@ export interface InputProps {
   type?: "text" | "number" | "email" | "password"
   disabled?: boolean
   setValue?(value: string)
-  label?: string
+  label?: React.ReactNode
   placeholder?: string
-  error?: string
-  hint?: string
+  error?: React.ReactNode
+  hint?: React.ReactNode
   className?: string
   inputClassName?: string
   autoFocus?: boolean

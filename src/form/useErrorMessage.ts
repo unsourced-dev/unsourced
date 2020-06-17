@@ -1,14 +1,15 @@
 import { getIn } from "formik"
+import { ReactNode } from "react"
 
 import { FormHook } from "./types"
 
 export interface UseErrorMessagePayload {
   form?: FormHook<any>
   name?: string
-  error?: string
+  error?: ReactNode
 }
 
-export function useErrorMessage(payload: UseErrorMessagePayload): string | undefined {
+export function useErrorMessage(payload: UseErrorMessagePayload): ReactNode | undefined {
   if (payload.error) {
     return payload.error
   }

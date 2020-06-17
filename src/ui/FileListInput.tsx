@@ -224,7 +224,7 @@ function RawSingleFileInput(props: RawSingleFileInputProps) {
 interface RawFileListInputProps {
   files: FileListHook
   accept?: string
-  errorMessage?: string
+  errorMessage?: React.ReactNode
 }
 
 function RawFileListInput(props: RawFileListInputProps) {
@@ -245,7 +245,7 @@ function RawFileListInput(props: RawFileListInputProps) {
 
 export interface FileListInputProps {
   name: string
-  label?: string
+  label?: React.ReactNode
   folder?: string
   preserve?: boolean
   /** The number of files to upload, defaults to -1 i.e. unlimitted. */
@@ -254,7 +254,7 @@ export interface FileListInputProps {
   accept?: string
   validate?(file: File): string | null
   className?: string
-  hint?: string
+  hint?: React.ReactNode
 }
 
 export function FileListInput(props: FileListInputProps) {

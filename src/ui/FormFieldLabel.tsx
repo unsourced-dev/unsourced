@@ -3,7 +3,7 @@ import React from "react"
 import { useTheme } from "./Theme"
 
 export interface FormFieldLabelProps {
-  label?: string
+  label?: React.ReactNode
   htmlFor?: string
 }
 

@@ -3,8 +3,8 @@ import React from "react"
 import { useTheme } from "./Theme"
 
 export interface FormFieldHintProps {
-  hint?: string
-  error?: string
+  hint?: React.ReactNode
+  error?: React.ReactNode
 }
 
 export function FormFieldHint(props: FormFieldHintProps) {
@@ -13,5 +13,5 @@ export function FormFieldHint(props: FormFieldHintProps) {
   if (!hint || error) {
     return <div />
   }
-  return <div className={theme.form.field.hint}>{String(hint)}</div>
+  return <div className={theme.form.field.hint}>{hint}</div>
 }

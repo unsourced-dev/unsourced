@@ -51,7 +51,7 @@ export interface TagListHook {
 
 export interface TagListInputProps {
   field: TagListHook
-  label?: string
+  label?: React.ReactNode
 }
 
 export function TagListInput(props: TagListInputProps) {

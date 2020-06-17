@@ -15,10 +15,9 @@ import { useTheme } from "./Theme"
 
 export interface FileRawInputProps {
   form?: FormHook<any>
-  errorMessage?: string
+  errorMessage?: React.ReactNode
   name?: string
-  label?: string
-  error?: string
+  label?: React.ReactNode
   value?: FileDef
   setValue?(value: FileDef)
   disabled?: boolean
@@ -92,8 +91,8 @@ export interface FileDef {
 
 export interface FileInputProps {
   name?: string
-  label?: string
-  error?: string
+  label?: React.ReactNode
+  error?: React.ReactNode
   value?: FileDef
   setValue?(value: FileDef)
   disabled?: boolean
@@ -102,7 +101,7 @@ export interface FileInputProps {
   folder?: string
   preserve?: boolean
   className?: string
-  hint?: string
+  hint?: React.ReactNode
 }
 
 export function FileInput(props: FileInputProps) {

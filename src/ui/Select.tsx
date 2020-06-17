@@ -18,9 +18,9 @@ export interface SelectProps {
   value?: string
   disabled?: boolean
   setValue?(value: string)
-  label?: string
-  error?: string
-  hint?: string
+  label?: React.ReactNode
+  error?: React.ReactNode
+  hint?: React.ReactNode
   placeholder?: string
   className?: string
   inputClassName?: string

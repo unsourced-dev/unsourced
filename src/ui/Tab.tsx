@@ -6,7 +6,7 @@ import { useTheme } from "./Theme"
 
 export interface TabProps {
   name: string
-  label?: string
+  label?: React.ReactNode
   disabled?: boolean
   className?: string
   children?: any

@@ -136,9 +136,9 @@ export interface DatetimeInputProps {
   name?: string
   type?: DateTimeType
   disabled?: boolean
-  label?: string
-  error?: string
-  hint?: string
+  label?: React.ReactNode
+  error?: React.ReactNode
+  hint?: React.ReactNode
   placeholder?: string
   className?: string
   inputClassName?: string

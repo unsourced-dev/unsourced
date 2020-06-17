@@ -7,7 +7,7 @@ import { MediaDef } from "./Media"
 import { MediaIcon } from "./MediaIcon"
 
 export interface DropdownMenuProps {
-  label?: string
+  label?: React.ReactNode
   icon?: IconName
   style?: ButtonStyle
   className?: string

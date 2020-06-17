@@ -545,7 +545,7 @@ export type MediaDef = MediaItemDef[]
 
 export interface MediaInputProps {
   name: string
-  label?: string
+  label?: React.ReactNode
   folder?: string
   preserve?: boolean
   /** The number of images/videos to upload, defaults to 1, set <0 for unlimitted. */
@@ -554,7 +554,7 @@ export interface MediaInputProps {
   width?: number
   accept?: string
   className?: string
-  hint?: string
+  hint?: React.ReactNode
   hd?: boolean
   sizeFull?: boolean
   imageContainerClass?: string
