@@ -136,7 +136,7 @@ export default [
     output: {
       dir: "dist",
       format: "cjs",
-      chunkFileNames: "_chunks/[name]-[hash].js",
+      chunkFileNames: "_chunks/[name]-[hash].d.ts",
     },
     plugins: [postcss(), dts({})],
   },
