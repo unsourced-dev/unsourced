@@ -7,6 +7,7 @@ import { getLinkOrButtonClassName } from "./utils/getLinkOrButtonClassName"
 export type LinkStyle = "primary" | "secondary" | "link" | "icon" | "unstyled"
 
 export interface LinkProps {
+  onClick?(e: React.MouseEvent)
   href: string
   as?: string
   style?: LinkStyle
@@ -19,19 +20,19 @@ export interface LinkProps {
 }
 
 export function Link(props: LinkProps) {
-  const { href, as, style = "link", target, disabled, download, children } = props
+  const { href, as, style = "link", target, disabled, download, onClick, children } = props
   const theme = useTheme()
   const className = getLinkOrButtonClassName(theme, style, disabled, props.className)
   if (target) {
     return (
-      <a href={href} className={className} target={target} download={download}>
+      <a href={href} className={className} target={target} download={download} onClick={onClick}>
         {children}
       </a>
     )
   }
   return (
     <NextLink href={href} as={as}>
-      <a className={className} download={download}>
+      <a className={className} download={download} onClick={onClick}>
         {children}
       </a>
     </NextLink>
