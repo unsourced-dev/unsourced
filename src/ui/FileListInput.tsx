@@ -5,11 +5,15 @@ import React from "react"
 import { deleteFile as deleteFileFirebase, uploadFile } from "../firebase/storage"
 import { FormHook, useErrorMessage, useFormFromContext } from "../form"
 import { useLogger } from "../utils/logger/useLogger"
+import { ConfirmButton } from "./ConfirmButton"
+import { FileDownloadLink } from "./FileDownloadLink"
 import { FileDef } from "./FileInput"
 import { FormFieldError } from "./FormFieldError"
 import { FormFieldHint } from "./FormFieldHint"
 import { FormFieldLabel } from "./FormFieldLabel"
+import { Icon } from "./Icon"
 import { RawInputWithIcon } from "./RawInputWithIcon"
+import { Row } from "./Row"
 import { useTheme } from "./Theme"
 
 function getValues(form: FormHook<any>, name: string, maxFiles?: number): FileDef[] {
@@ -178,16 +182,12 @@ function RawSingleFileInput(props: RawSingleFileInputProps) {
   switch (status) {
     case "file":
       return (
-        <RawInputWithIcon
-          icon="trash"
-          onClick={() => files.deleteFile(index)}
-          className={className}
-          value={value.name || value.url}
-          name={name}
-          type="text"
-          modal={{}}
-          disabled
-        />
+        <Row align="space-between" valign="center" className={className}>
+          <FileDownloadLink file={value} />
+          <ConfirmButton style="icon" onClick={() => files.deleteFile(index)}>
+            <Icon name="trash" />
+          </ConfirmButton>
+        </Row>
       )
     case "loading":
     case "deleting":

@@ -3,10 +3,14 @@ import React from "react"
 
 import { FormHook, useErrorMessage, useFormFromContext } from "../form"
 import { useFieldFile } from "../form/file"
+import { ConfirmButton } from "./ConfirmButton"
+import { FileDownloadLink } from "./FileDownloadLink"
 import { FormFieldError } from "./FormFieldError"
 import { FormFieldHint } from "./FormFieldHint"
 import { FormFieldLabel } from "./FormFieldLabel"
+import { Icon } from "./Icon"
 import { RawInputWithIcon } from "./RawInputWithIcon"
+import { Row } from "./Row"
 import { useTheme } from "./Theme"
 
 //
@@ -48,16 +52,12 @@ export function FileRawInput(props: FileRawInputProps) {
       )
     case "file":
       return (
-        <RawInputWithIcon
-          icon="trash"
-          onClick={deleteFile}
-          className={className}
-          value={value.name || value.url}
-          name={name}
-          type="text"
-          modal={{}}
-          disabled
-        />
+        <Row align="space-between" valign="center" className={className}>
+          <FileDownloadLink file={value} />
+          <ConfirmButton style="icon" onClick={deleteFile}>
+            <Icon name="trash" />
+          </ConfirmButton>
+        </Row>
       )
     case "empty":
       return (
