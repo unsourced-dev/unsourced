@@ -1,6 +1,7 @@
 import { Reducer, useEffect, useReducer, useRef } from "react"
 
-import { Collection } from "../../Collection"
+import { Collection } from "./Collection"
+import { DocumentFormHook } from "./types"
 
 //
 // -----------------------------------------------------
@@ -96,16 +97,6 @@ function isReady(loading: boolean, error: string | undefined, form: DocumentForm
   if (!form) return true
   if (!form.values || typeof form.values !== "object") return false
   return Object.keys(form.values).length > 0
-}
-
-export interface ResetFormPayload {
-  values: any
-}
-
-export interface DocumentFormHook {
-  setValues(values: any)
-  resetForm(payload: ResetFormPayload)
-  values: any
 }
 
 export interface OnNotFoundResult<T = any> {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
-import { Collection } from "../../Collection"
-import { Query, QueryCondition, QueryOrderBy } from "../../types"
+import { Collection } from "./Collection"
+import { Query, QueryCondition, QueryOrderBy } from "./types"
 
 function toString(options: UseCollectionOptions<any>): string {
   let result = options.limit ? String(options.limit) : ""

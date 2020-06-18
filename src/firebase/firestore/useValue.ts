@@ -1,8 +1,8 @@
 import eq from "fast-deep-equal"
 import { useEffect, useState } from "react"
 
-import { getFromCache } from "../../cache"
-import { firestore } from "../../firestore"
+import { getFromCache } from "./cache"
+import { firestore } from "./firestore"
 
 export function useValue<T>(path: string, values?: T): T {
   const [result, setResult] = useState<T>(getFromCache(path) || values)

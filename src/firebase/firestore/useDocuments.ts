@@ -2,9 +2,10 @@ import eq from "fast-deep-equal"
 import { getIn, setIn } from "formik"
 import { Reducer, useEffect, useReducer, useRef } from "react"
 
-import { StringMap } from "../../../../types"
-import { isPromise } from "../../../../utils/isPromise"
-import { Collection } from "../../Collection"
+import { StringMap } from "../../types"
+import { isPromise } from "../../utils/isPromise"
+import { Collection } from "./Collection"
+import { DocumentFormHook } from "./types"
 
 //
 // -----------------------------------------------------
@@ -31,7 +32,7 @@ const empty: State = {
 type Action =
   | { type: "fetch"; ids: StringMap<string> }
   | { type: "success"; data: any }
-  | { type: "not-found"; data: OnNotFoundResult }
+  | { type: "not-found"; data: OnNotFoundsResult }
   | { type: "error"; error: any }
   | { type: "set-ready"; ready: boolean }
   | { type: "set-values"; values: any }
@@ -80,7 +81,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function defaultOnNotFound(ids: StringMap<string>): OnNotFoundResult<any> {
+function defaultOnNotFound(ids: StringMap<string>): OnNotFoundsResult<any> {
   return { ids, values: undefined }
 }
 
@@ -139,36 +140,26 @@ function isReady(loading: boolean, error: string | undefined, form: DocumentForm
   return Object.keys(form.values).length > 0
 }
 
-export interface ResetFormPayload {
-  values: any
-}
-
-export interface DocumentFormHook {
-  setValues(values: any)
-  resetForm(payload: ResetFormPayload)
-  values: any
-}
-
-export interface OnNotFoundResult<T = any> {
+export interface OnNotFoundsResult<T = any> {
   ids?: StringMap<string>
   values?: T
   error?: string
 }
 
-export interface SetDocumentPayload<T> {
+export interface SetDocumentsPayload<T> {
   ids: StringMap<string>
   values: Partial<T>
   exists: boolean
 }
 
-export interface SetDocument<T> {
+export interface SetDocuments<T> {
   (values: Partial<T>): Promise<T>
 }
 
 export interface UseDocumentsOptions<T> {
   values?: T
-  onNotFound?(ids: StringMap<string>): OnNotFoundResult<T> | Promise<OnNotFoundResult<T>>
-  set?(payload: SetDocumentPayload<T>, doSet: SetDocument<T>): Promise<any>
+  onNotFound?(ids: StringMap<string>): OnNotFoundsResult<T> | Promise<OnNotFoundsResult<T>>
+  set?(payload: SetDocumentsPayload<T>, doSet: SetDocuments<T>): Promise<any>
   createNew?: boolean
   // When set to true, patches the data on set instead of just setting.
   patch?: boolean

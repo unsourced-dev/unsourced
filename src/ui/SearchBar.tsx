@@ -1,6 +1,6 @@
 import React from "react"
 
-import { SearchHook } from "../firebase/firestore/hooks/search/useSearch"
+import { SearchHook } from "../firebase/firestore/useSearch"
 import { useForm } from "../form"
 import { Form } from "./Form"
 import { Input } from "./Input"

@@ -1,5 +1,5 @@
-import { Transform } from "../types"
-import { encodeValue } from "../utils"
+import { Transform } from "./types"
+import { encodeValue } from "./utils"
 
 function isNumber(v) {
   return typeof v === "number" && !isNaN(v - v)

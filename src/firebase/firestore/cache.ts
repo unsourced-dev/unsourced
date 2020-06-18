@@ -1,4 +1,4 @@
-import { Cache } from "../../../utils/Cache"
+import { Cache } from "../../utils/Cache"
 
 const CACHE = new Cache({ enabled: true, clientSideOnly: true })
 

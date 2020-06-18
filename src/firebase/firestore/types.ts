@@ -51,3 +51,13 @@ export interface Transform {
 export type WithTransform<T> = {
   [K in keyof T]: T[K] | Transform | WithTransform<T[K]>
 }
+
+export interface ResetFormPayload {
+  values: any
+}
+
+export interface DocumentFormHook {
+  setValues(values: any)
+  resetForm(payload: ResetFormPayload)
+  values: any
+}

@@ -1,8 +1,8 @@
 import { removeUndefinedFields } from "../../utils/removeUndefinedFields"
 import { deleteInCache, getFromCache, setInCache } from "./cache"
-import { computeDiff } from "./computeDiff"
 import { firestore } from "./firestore"
 import { FetchedDocument, Query, WithTransform } from "./types"
+import { computeDiff } from "./utils/computeDiff"
 
 //
 // -----------------------------------------------------

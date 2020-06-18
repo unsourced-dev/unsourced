@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-import { Collection } from "../../Collection"
-import { QueryCondition, QueryOrderBy } from "../../types"
-import { useCollection } from "../collection/useCollection"
+import { Collection } from "./Collection"
+import { QueryCondition, QueryOrderBy } from "./types"
+import { useCollection } from "./useCollection"
 
 export interface UseSearchPayload<Values> {
   collection: Collection<Values>

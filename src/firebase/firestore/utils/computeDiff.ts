@@ -1,8 +1,8 @@
 import { getIn } from "formik"
 
-import { StringMap } from "../../types"
-import { removeUndefinedFields } from "../../utils/removeUndefinedFields"
-import { Transforms } from "./transforms"
+import { StringMap } from "../../../types"
+import { removeUndefinedFields } from "../../../utils/removeUndefinedFields"
+import { Transforms } from "../transforms"
 
 function isPrimitiveType(data: any): boolean {
   switch (typeof data) {

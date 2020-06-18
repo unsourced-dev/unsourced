@@ -1,6 +1,7 @@
 import React from "react"
 
-import { FormContext, FormHook } from "../form"
+import { FormContext } from "../form/FormContext"
+import { FormHook } from "../form/types"
 
 export interface FormProps {
   form: FormHook
