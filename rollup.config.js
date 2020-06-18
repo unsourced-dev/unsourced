@@ -61,6 +61,7 @@ const input = {
   "ui/List": "src/ui/List.tsx",
   "ui/ListItem": "src/ui/ListItem.tsx",
   "ui/LoadingBar": "src/ui/LoadingBar.tsx",
+  "ui/MailtoLink": "src/ui/MailtoLink.tsx",
   "ui/Media": "src/ui/Media.tsx",
   "ui/MediaCarousel": "src/ui/MediaCarousel.tsx",
   "ui/MediaIcon": "src/ui/MediaIcon.tsx",
