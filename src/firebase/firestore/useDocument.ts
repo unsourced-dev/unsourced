@@ -204,9 +204,9 @@ export function useDocument<T>(
 
   async function doSet(values: any) {
     if (state.exists && options.patch) {
-      return collection.patch(id, values, state.values)
+      return collection.patch(state.id, values, state.values)
     }
-    return collection.set(id, values)
+    return collection.set(state.id, values)
   }
 
   useEffect(() => {
@@ -233,7 +233,7 @@ export function useDocument<T>(
 
       let actualValues: T
       if (options.set) {
-        await options.set({ id, values, exists }, async (values) => {
+        await options.set({ id: state.id, values, exists }, async (values) => {
           actualValues = await doSet(values)
           return actualValues
         })
