@@ -39,10 +39,11 @@ export interface ColumnProps {
   space?: Space
   children?: any
   reverse?: boolean
+  title?: string
 }
 
 export function Column(props: ColumnProps) {
-  const { align, valign, space, reverse, children } = props
+  const { align, valign, space, reverse, children, title } = props
 
   const className = cc(
     "flex",
@@ -53,5 +54,9 @@ export function Column(props: ColumnProps) {
     props.className
   )
 
-  return <div className={className}>{children}</div>
+  return (
+    <div className={className} title={title}>
+      {children}
+    </div>
+  )
 }

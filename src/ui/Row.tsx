@@ -41,10 +41,11 @@ export interface RowProps {
   /** Does not work well with space. */
   wrap?: boolean
   reverse?: boolean
+  title?: string
 }
 
 export function Row(props: RowProps) {
-  const { align, valign, wrap, space, reverse, children } = props
+  const { align, valign, wrap, space, reverse, children, title } = props
 
   const className = cc(
     "flex ",
@@ -56,5 +57,9 @@ export function Row(props: RowProps) {
     props.className
   )
 
-  return <div className={className}>{children}</div>
+  return (
+    <div className={className} title={title}>
+      {children}
+    </div>
+  )
 }
