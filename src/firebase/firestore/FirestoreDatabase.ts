@@ -67,7 +67,10 @@ export interface FirestoreDatabaseConfig {
 
 export class FirestoreDatabase {
   private root: string
-  constructor(public config: FirestoreDatabaseConfig) {
+  private config: FirestoreDatabaseConfig
+  constructor(config: FirestoreDatabaseConfig) {
+    console.log("Initializing database ", config)
+    this.config = config
     this.root = "projects/" + config.projectId + "/databases/(default)/documents"
   }
 
