@@ -3,6 +3,9 @@ import app from "firebase/app"
 import { FirebaseConfig, setConfig } from "../config"
 
 export function initialize(config: FirebaseConfig) {
+  if (!config) {
+    throw new Error("No config provided to initialize firebase.")
+  }
   if (app.apps.length === 0) {
     try {
       setConfig(config)

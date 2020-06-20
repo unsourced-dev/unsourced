@@ -107,9 +107,13 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   const firestoreUser = useRef<User>(getFirebaseUser())
   const logger = useLogger()
 
+  // do this blocking to set the config ASAP
+  if (!isFirebaseInitialized()) {
+    initialize(options.config)
+  }
+
   useEffect(() => {
     logger.setLoading(true)
-    initialize(options.config)
     const unsubscribe = auth().onAuthStateChanged(async (u) => {
       if (isSigningUp) {
         return
