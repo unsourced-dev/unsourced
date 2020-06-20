@@ -68,7 +68,7 @@ export interface FirestoreDatabaseConfig {
 export class FirestoreDatabase {
   private root: string
   constructor(public config: FirestoreDatabaseConfig) {
-    this.root = "projects/" + this.config.projectId + "/databases/(default)/documents"
+    this.root = "projects/" + config.projectId + "/databases/(default)/documents"
   }
 
   private getDocumentName(path: string) {
