@@ -13,30 +13,19 @@ export interface DropdownMenuProps {
   className?: string
   children?: any
   right?: boolean
-  buttonClassName?: string
-  itemsClass?: string
   iconOpen?: IconName
-  iconContainerClass?: string
-  iconClass?: string
   media?: MediaDef
   mediaClass?: string
+  classes?: {
+    button?: string
+    items?: string
+    icon?: string
+    iconContainer?: string
+  }
 }
 
 export function DropdownMenu(props: DropdownMenuProps) {
-  const {
-    label,
-    icon,
-    style,
-    className,
-    right,
-    buttonClassName,
-    itemsClass,
-    iconContainerClass,
-    iconClass,
-    children,
-    media,
-    mediaClass,
-  } = props
+  const { label, icon, style, className, right, children, media, mediaClass, classes } = props
   const iconOpen = props.iconOpen ? props.iconOpen : props.icon
   const [open, setOpen] = React.useState<boolean>(false)
   const menuRef = useOutsideClick(() => setOpen(false))
@@ -53,21 +42,17 @@ export function DropdownMenu(props: DropdownMenuProps) {
         style={style}
         onClick={clickHandler}
         buttonRef={menuRef}
-        className={"flex items-center " + (buttonClassName || "")}
+        className={"flex items-center " + (classes?.button || "")}
       >
         {label}
-        <div className={iconContainerClass}>
-          {!media && icon && (
-            <Icon name={open ? iconOpen : icon} size="small" className={iconClass ? iconClass : "ml-2"} />
-          )}
+        <div className={classes?.iconContainer}>
+          {!media && icon && <Icon name={open ? iconOpen : icon} size="small" className={classes?.icon || "ml-2"} />}
           {media && <MediaIcon media={media} fallback={icon} className={mediaClass} />}
         </div>
       </Button>
       <div
         style={{ display: open ? "block" : "none", right: right ? 0 : undefined }}
-        className={
-          itemsClass ? itemsClass : "border rounded w-64 text-gray-700 leading-tight mt-1 z-10 absolute bg-white"
-        }
+        className={classes?.items || "border rounded w-64 text-gray-700 leading-tight mt-1 z-10 absolute bg-white"}
       >
         {children}
       </div>
