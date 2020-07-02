@@ -73,46 +73,46 @@ export const DEFAULT_THEME: Theme = {
   root: "",
   buttons: {
     primary: {
-      all: "text-black text-lg md:text-base font-semibold py-1 px-4 rounded-full inline-block",
-      enabled: "bg-green-button focus:shadow-outline",
-      disabled: "bg-green-button-disabled text-lightgray cursor-not-allowed",
+      all: "text-white font-bold py-2 px-4 rounded inline-block",
+      enabled: "bg-orange-600 hover:bg-orange-800 focus:shadow-outline",
+      disabled: "bg-orange-400 cursor-not-allowed",
     },
     secondary: {
-      all: "text-black text-lg md:text-base font-normal py-1 px-4 rounded-full inline-block",
-      enabled: "bg-white hover:bg-gray-100 focus:shadow-outline border-mp-green",
-      disabled: "bg-gray-400 cursor-not-allowed border-0",
+      all: "text-white font-bold py-2 px-4 rounded inline-block",
+      enabled: "bg-gray-600 hover:bg-gray-700 focus:shadow-outline",
+      disabled: "bg-gray-400 cursor-not-allowed",
     },
     danger: {
-      all: "text-white text-lg md:text-base font-semibold py-1 px-4 rounded-full inline-block text-sm",
+      all: "text-white font-bold py-2 px-4 rounded inline-block",
       enabled: "bg-red-600 hover:bg-red-800 focus:shadow-outline",
       disabled: "bg-red-400 cursor-not-allowed",
     },
     link: {
-      all: "text-primary",
-      enabled: "hover:underline focus:underline text-mp-blue",
-      disabled: "text-gray-400 cursor-not-allowed text-gray-500",
+      all: "",
+      enabled: "hover:underline focus:underline text-orange-700 hover:text-orange-700",
+      disabled: "cursor-not-allowed text-gray-500",
     },
     icon: {
       all: "text-gray-700",
-      enabled: "hover:text-blue-800",
+      enabled: "hover:text-orange-800",
       disabled: "text-gray-700 opacity-50 cursor-not-allowed",
     },
   },
   form: {
     field: {
-      wrapper: "block mb-2 text-lg",
-      label: "block mb-1 font-bold text-gray text-xs tracking-widest uppercase",
+      wrapper: "block mb-4",
+      label: "block font-bold mb-2",
       error: "text-red-700 text-sm",
-      hint: "text-lightgray text-xs pb-2",
+      hint: "text-gray-600 text-sm",
     },
     control: {
       raw:
-        "text-lg appearance-none w-full py-2 pl-2 mb-2 border rounded outline-primary leading-tight disabled:bg-gray-200",
+        "appearance-none w-full py-2 px-3 border rounded leading-tight focus:outline-none focus:shadow-outline disabled:bg-gray-200",
       disabled: "bg-gray-200 cursor-disabled",
       error: "border-red-500",
-      focused: "shadow-outline",
+      focused: "outline-none shadow-outline",
     },
-    error: "text-red-700 text-lg mr-4 my-2",
+    error: "text-red-700 text-lg mr-4",
   },
   heading: {
     h1: "text-5xl font-heading leading-tight",
@@ -124,10 +124,10 @@ export const DEFAULT_THEME: Theme = {
   },
   tabs: {
     all: "no-underline text-sm tracking-wide font-normal py-3 px-2 sm:px-4",
-    selected: "text-green font-semibold",
-    unselected: "text-gray",
+    selected: "text-orange-700 font-semibold",
+    unselected: "text-gray-800",
     disabled: "text-gray-400",
-    selectedDisabled: "text-blue-400 border-blue-400",
+    selectedDisabled: "text-orang-400",
   },
 }
 
