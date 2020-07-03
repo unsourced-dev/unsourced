@@ -42,6 +42,7 @@ export interface SignInResult {
     email?: string
     password?: string
   }
+  errorCode?: string
 }
 
 export interface VerifyEmailResult {
@@ -88,6 +89,7 @@ export interface SignUpResult {
     email?: string
     password?: string
   }
+  errorCode?: string
 }
 
 export interface UseFirestoreAuthPayload<U> {
