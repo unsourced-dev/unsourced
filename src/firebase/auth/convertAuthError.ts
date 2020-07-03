@@ -5,6 +5,7 @@ export interface AuthError {
     email?: string
     password?: string
   }
+  errorCode?: string
 }
 
 export function convertAuthError(error: any): AuthError {
@@ -16,7 +17,8 @@ export function convertAuthError(error: any): AuthError {
     return { ok: false, error: error.message || error }
   }
 
-  switch (error.code) {
+  const errorCode = error.code
+  switch (errorCode) {
     // sign up
     case "auth/email-already-in-use":
       return {
@@ -24,6 +26,7 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           email: error.message,
         },
+        errorCode,
       }
     // sign up/sign in
     case "auth/invalid-email":
@@ -32,12 +35,14 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           email: error.message,
         },
+        errorCode,
       }
     // sign up
     case "auth/operation-not-allowed":
       return {
         ok: false,
         error: "Technical error",
+        errorCode,
       }
     // sign up
     case "auth/weak-password":
@@ -46,6 +51,7 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           password: error.message,
         },
+        errorCode,
       }
     // sign in
     case "auth/user-disabled":
@@ -54,6 +60,7 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           email: error.message,
         },
+        errorCode,
       }
     // sign in
     case "auth/user-not-found":
@@ -62,6 +69,7 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           email: "No user found with this email address",
         },
+        errorCode,
       }
     // sign in
     case "auth/wrong-password":
@@ -70,6 +78,7 @@ export function convertAuthError(error: any): AuthError {
         errors: {
           password: error.message,
         },
+        errorCode,
       }
     case "auth/missing-continue-uri":
     case "auth/invalid-continue-uri":
@@ -80,6 +89,7 @@ export function convertAuthError(error: any): AuthError {
       return {
         ok: false,
         error: error.message,
+        errorCode,
       }
   }
 }
