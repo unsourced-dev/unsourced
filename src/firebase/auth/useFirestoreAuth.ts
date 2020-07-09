@@ -134,7 +134,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
         return
       }
 
-      const newUser = u ? user || (await options.getUser(u)) : null
+      const newUser = u ? await options.getUser(u) : null
       firestoreUser.current = u
       setUser(newUser)
       setUserInCache(newUser)
