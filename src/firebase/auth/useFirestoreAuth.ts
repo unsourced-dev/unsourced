@@ -128,6 +128,14 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   useEffect(() => {
+    if (getFirebaseUser() && getCachedUser()) {
+      firestoreUser.current = getFirebaseUser()
+      if (!user) {
+        setUser(getCachedUser())
+      }
+      return () => {}
+    }
+
     logger.setLoading(true)
     const unsubscribe = auth().onAuthStateChanged(async (u) => {
       if (isSigningUp) {
