@@ -88,7 +88,8 @@ function defaultOnNotFound(ids: StringMap<string>): OnNotFoundsResult<any> {
 function getIds(docs: Docs) {
   const result: any = {}
   for (const key of Object.keys(docs)) {
-    result[key] = docs[key][1]
+    const id = docs[key][1]
+    if (id) result[key] = id
   }
   return result
 }
@@ -257,6 +258,8 @@ export function useDocuments<T>(docs: Docs, options: UseDocumentsOptions<T> = {}
 
   useEffect(() => {
     const ids = getIds(docs)
+    if (Object.keys(ids).length === 0) return
+
     if (eq(state.ids, ids)) {
       if (options.values && formHook.current) {
         const { values } = options

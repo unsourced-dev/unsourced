@@ -176,6 +176,8 @@ export function useDocument<T>(
   }
 
   useEffect(() => {
+    if (!id) return
+
     if (id === state.id) {
       if (options.values && formHook.current) {
         const { values } = options
