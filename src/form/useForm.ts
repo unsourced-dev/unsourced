@@ -9,13 +9,15 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
   const { onSubmit, document, notifyOnSuccess, notifyOnError } = options || {}
   if (document) {
     return async (values: Values, form: FormHook<Values>) => {
+      // the form is actually a formik form, dirty hack to set the document
+      form.document = options.document
       try {
         form.setStatus(undefined)
         await document.set(values)
 
         let hasError = null
         if (onSubmit) {
-          const result = await onSubmit(values)
+          const result = await onSubmit(values, form)
 
           if (result && result.error) form.setStatus(result.error)
           if (result && result.errors) form.setErrors(result.errors)
@@ -42,8 +44,10 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
   }
   if (onSubmit) {
     return async (values: Values, form: FormHook<Values>) => {
+      // the form is actually a formik form, dirty hack to set the document
+      form.document = options.document
       try {
-        const result = await onSubmit(values)
+        const result = await onSubmit(values, form)
 
         if (result && result.error) form.setStatus(result.error)
         if (result && result.errors) form.setErrors(result.errors)
@@ -69,8 +73,7 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
 
 export function useForm<Values = any>(options: UseFormOptions<Values> = {}): FormHook<Values> {
   const logger = useLogger()
-  const onSubmitDeps = [options.document, options.onSubmit]
-  const onSubmit = useMemo<any>(() => getOnSubmit(options, logger), onSubmitDeps)
+  const onSubmit = useMemo<any>(() => getOnSubmit(options, logger), [options.document, options.onSubmit])
   const initialValues: any = options.initialValues || (options.document && options.document.values) || {}
   const formik = useFormik({ ...options, onSubmit, initialValues })
   useConfirmOnLeave(!formik.isSubmitting && formik.dirty)
