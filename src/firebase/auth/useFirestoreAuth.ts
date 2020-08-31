@@ -295,7 +295,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       return { ok: true }
     } catch (err) {
       console.error("Error while reseting password!", err, err.details)
-      return { ok: false, err: err.message || err }
+      return { ok: false, error: err.message || err }
     }
   }
 
@@ -305,7 +305,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       return { ok: true }
     } catch (err) {
       console.error("Error while confirming reset password!", err, err.details)
-      return { ok: false, err: err.message || err }
+      return { ok: false, error: err.message || err }
     }
   }
 
@@ -315,7 +315,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       return { ok: true }
     } catch (err) {
       console.error("Error while confirming email!", err, err.details)
-      return { ok: false, err: err.message || err }
+      return { ok: false, error: err.message || err }
     }
   }
 
