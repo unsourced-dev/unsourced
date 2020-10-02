@@ -126,8 +126,8 @@ export const DEFAULT_THEME: Theme = {
     all: "no-underline text-sm tracking-wide font-normal py-3 px-2 sm:px-4",
     selected: "text-orange-700 font-semibold",
     unselected: "text-gray-800",
-    disabled: "text-gray-400",
-    selectedDisabled: "text-orang-400",
+    disabled: "text-gray-400 cursor-not-allowed",
+    selectedDisabled: "text-orange-400 cursor-not-allowed",
   },
 }
 
