@@ -34,5 +34,14 @@ export function Image(props: ImageProps) {
     )
   }
 
-  return <img className={className} src={src} alt={alt} height={height} width={width} style={{ height: "inherit" }} />
+  return (
+    <img
+      className={className}
+      src={src}
+      alt={alt}
+      height={height}
+      width={width}
+      style={height && !width ? undefined : { height: "inherit" }}
+    />
+  )
 }
