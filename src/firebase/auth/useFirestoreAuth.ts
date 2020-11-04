@@ -1,6 +1,6 @@
+import { auth, User } from "firebase/app"
 import "firebase/auth"
 
-import { auth, User } from "firebase/app"
 import { useEffect, useRef, useState } from "react"
 
 import { useLogger } from "../../utils/logger/useLogger"

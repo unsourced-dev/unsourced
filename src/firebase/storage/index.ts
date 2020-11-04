@@ -1,3 +1,4 @@
+import "firebase/app"
 import "firebase/storage"
 
 export * from "./deleteFile"
