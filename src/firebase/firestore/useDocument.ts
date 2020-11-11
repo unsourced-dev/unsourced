@@ -71,7 +71,7 @@ function reducer(state: State, action: Action): State {
     case "set-ready":
       return { ...state, ready: action.ready }
     case "set-values":
-      return { ...state, values: action.values, exists: true, ready: false }
+      return { ...state, values: action.values, exists: !!action.values, ready: false }
     default:
       return state
   }
@@ -133,6 +133,7 @@ export interface DocumentHook<T> {
   set(document: T): Promise<void>
   setForm(form: DocumentFormHook): void
   refresh(): Promise<void>
+  delete(): Promise<void>
 }
 
 export function useDocument<T>(
@@ -250,6 +251,12 @@ export function useDocument<T>(
     },
     setForm(form) {
       formHook.current = form
+    },
+    async delete() {
+      if (state.id) {
+        await collection.delete(state.id)
+        dispatch({ type: "set-values", values: undefined })
+      }
     },
   }
 }
