@@ -1,4 +1,5 @@
 import { Reducer, useEffect, useReducer, useRef } from "react"
+import { isPromise } from "../../utils/isPromise"
 
 import { Collection } from "./Collection"
 import { DocumentFormHook } from "./types"
@@ -117,7 +118,7 @@ export interface SetDocument<T> {
 
 export interface UseDocumentOptions<T> {
   values?: T
-  onNotFound?(id: string): OnNotFoundResult<T>
+  onNotFound?(id: string): OnNotFoundResult<T> | Promise<OnNotFoundResult<T>>
   set?(payload: SetDocumentPayload<T>, doSet: SetDocument<T>): Promise<any>
   createNew?: boolean
   // When set to true, patches the data on set instead of just setting.
@@ -157,7 +158,10 @@ export function useDocument<T>(
 
       if (!values) {
         const onNotFound = options.onNotFound || defaultOnNotFound
-        const result = onNotFound(id)
+        let result = onNotFound(id)
+        if (isPromise(result)) {
+          result = await result
+        }
 
         dispatch({ type: "not-found", data: result })
         if (formHook.current && result.values) {
@@ -192,7 +196,10 @@ export function useDocument<T>(
     async function effect() {
       if (options.createNew) {
         const onNew = options.onNotFound || defaultOnNotFound
-        const result = onNew(id)
+        let result = onNew(id)
+        if (isPromise(result)) {
+          result = await result
+        }
         dispatch({ type: "not-found", data: result })
         if (formHook.current && result.values) {
           const { values } = result
