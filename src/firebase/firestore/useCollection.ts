@@ -65,6 +65,7 @@ export function useCollection<T>(collection: Collection<T>, options: UseCollecti
       const docs = await collection.query(query)
       setDocuments(reset ? docs : documents.concat(docs))
       setFetchedCount(reset ? limit : fetchedCount + limit)
+      if (reset) setOffset(0)
       setLoading(false)
     } catch (err) {
       setLoading(false)
@@ -76,10 +77,10 @@ export function useCollection<T>(collection: Collection<T>, options: UseCollecti
   }
 
   useEffect(() => {
-    if (fetchedCount === offset + limit) {
+    if (options.documents && offset === 0 && fetchedCount === limit) {
       return
     }
-    fetchStuff(false, options)
+    fetchStuff(true, options)
   }, getDependencies(collection, options))
 
   return {
