@@ -57,7 +57,7 @@ export class TransformImpl implements Transform {
       )
 
     if (validator === Array.isArray) this.__encodedTransform[transformName] = encodeValue(value).arrayValue
-    else this.__encodedTransform[transformName] = name === "serverTimestamp" ? "REQUEST_TIME" : encodeValue(value)
+    else this.__encodedTransform[transformName] = type === "serverTimestamp" ? "REQUEST_TIME" : encodeValue(value)
   }
 }
 

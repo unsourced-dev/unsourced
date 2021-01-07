@@ -1,4 +1,4 @@
-import { auth, User } from "firebase/app"
+import app from "firebase/app"
 import "firebase/auth"
 
 import { useEffect, useRef, useState } from "react"
@@ -11,14 +11,14 @@ import { convertAuthError } from "./convertAuthError"
 
 function getFirebaseUser() {
   if (isFirebaseInitialized()) {
-    return auth().currentUser
+    return app.auth().currentUser
   }
   return undefined
 }
 
 export interface AuthHook<U> {
   user?: U
-  firestoreUser?: User
+  firestoreUser?: app.User
   signIn(payload: SignInPayload): Promise<SignInResult>
   signUp(payload: SignUpPayload<U>): Promise<SignUpResult>
   signUpWithProvider(payload: SignUpWithProviderPayload<U>): Promise<SignUpResult>
@@ -61,10 +61,10 @@ export interface ConfirmPasswordResetResult {
 }
 
 export interface GetUserPayload<U> {
-  user: User
+  user: app.User
   existing?: U
   payload: any
-  credentials: firebase.auth.UserCredential
+  credentials: app.auth.UserCredential
 }
 
 export interface SignUpPayload<U> {
@@ -76,7 +76,7 @@ export interface SignUpPayload<U> {
 }
 
 export interface SignUpWithProviderPayload<U> {
-  provider: firebase.auth.AuthProvider
+  provider: app.auth.AuthProvider
   keepMeSignedIn: boolean
   getUser(payload: GetUserPayload<U>): Promise<U>
   createUserPayload?: any
@@ -94,7 +94,7 @@ export interface SignUpResult {
 
 export interface UseFirestoreAuthPayload<U> {
   config: FirebaseConfig
-  getUser(user: User): Promise<U>
+  getUser(user: app.User): Promise<U>
   onAuthStateChange?(user: U | undefined): void
   sendVerificationEmail?: boolean
 }
@@ -119,7 +119,7 @@ export function getCachedUser<U>(): U {
 
 export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
   const [user, setUser] = useState<U>(CACHE.user)
-  const firestoreUser = useRef<User>(getFirebaseUser())
+  const firestoreUser = useRef<app.User>(getFirebaseUser())
   const logger = useLogger()
 
   // do this blocking to set the config ASAP
@@ -129,7 +129,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
   useEffect(() => {
     logger.setLoading(true)
-    const unsubscribe = auth().onAuthStateChanged(async (u) => {
+    const unsubscribe = app.auth().onAuthStateChanged(async (u) => {
       if (isSigningUp) {
         return
       }
@@ -155,8 +155,10 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     setUserInCache(null)
     await logger.setLoading(true)
     try {
-      await auth().setPersistence(keepMeSignedIn ? auth.Auth.Persistence.LOCAL : auth.Auth.Persistence.SESSION)
-      await auth().signInWithEmailAndPassword(email, password)
+      await app
+        .auth()
+        .setPersistence(keepMeSignedIn ? app.auth.Auth.Persistence.LOCAL : app.auth.Auth.Persistence.SESSION)
+      await app.auth().signInWithEmailAndPassword(email, password)
       await logger.setLoading(false)
       return {}
     } catch (err) {
@@ -170,20 +172,22 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
     logger.setLoading(true)
     isSigningUp = true
-    let credentials: firebase.auth.UserCredential = null
+    let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
 
     try {
-      await auth().setPersistence(keepMeSignedIn ? auth.Auth.Persistence.LOCAL : auth.Auth.Persistence.SESSION)
+      await app
+        .auth()
+        .setPersistence(keepMeSignedIn ? app.auth.Auth.Persistence.LOCAL : app.auth.Auth.Persistence.SESSION)
 
-      if (auth().currentUser) {
-        const cred = auth.EmailAuthProvider.credential(email, password)
-        credentials = await auth().currentUser.linkWithCredential(cred)
+      if (app.auth().currentUser) {
+        const cred = app.auth.EmailAuthProvider.credential(email, password)
+        credentials = await app.auth().currentUser.linkWithCredential(cred)
       } else {
         isCreatingNewUser = true
         setUser(null)
         setUserInCache(null)
-        credentials = await auth().createUserWithEmailAndPassword(email, password)
+        credentials = await app.auth().createUserWithEmailAndPassword(email, password)
       }
       isSigningUp = false
     } catch (err) {
@@ -193,7 +197,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     }
 
     try {
-      firestoreUser.current = auth().currentUser
+      firestoreUser.current = app.auth().currentUser
       const newUser = await payload.getUser({
         user: credentials.user,
         payload: payload.createUserPayload,
@@ -216,7 +220,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
       if (isCreatingNewUser) {
         try {
-          await auth().currentUser.delete()
+          await app.auth().currentUser.delete()
         } catch (err2) {
           // ignore
         }
@@ -231,19 +235,21 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
     logger.setLoading(true)
     isSigningUp = true
-    let credentials: firebase.auth.UserCredential = null
+    let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
 
     try {
-      await auth().setPersistence(keepMeSignedIn ? auth.Auth.Persistence.LOCAL : auth.Auth.Persistence.SESSION)
+      await app
+        .auth()
+        .setPersistence(keepMeSignedIn ? app.auth.Auth.Persistence.LOCAL : app.auth.Auth.Persistence.SESSION)
 
-      if (auth().currentUser) {
-        credentials = await auth().currentUser.linkWithPopup(provider)
+      if (app.auth().currentUser) {
+        credentials = await app.auth().currentUser.linkWithPopup(provider)
       } else {
         isCreatingNewUser = true
         setUser(null)
         setUserInCache(null)
-        credentials = await auth().signInWithPopup(provider)
+        credentials = await app.auth().signInWithPopup(provider)
       }
       isSigningUp = false
     } catch (err) {
@@ -254,7 +260,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     }
 
     try {
-      firestoreUser.current = auth().currentUser
+      firestoreUser.current = app.auth().currentUser
       const newUser = await payload.getUser({
         user: credentials.user,
         payload: payload.createUserPayload,
@@ -273,7 +279,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
       if (isCreatingNewUser) {
         try {
-          await auth().currentUser.delete()
+          await app.auth().currentUser.delete()
         } catch (err2) {
           // ignore
         }
@@ -286,12 +292,12 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   function signOut() {
     setUser(null)
     setUserInCache(null)
-    return auth().signOut()
+    return app.auth().signOut()
   }
 
   async function sendPasswordResetEmail(email: string) {
     try {
-      await auth().sendPasswordResetEmail(email)
+      await app.auth().sendPasswordResetEmail(email)
       return { ok: true }
     } catch (err) {
       console.error("Error while reseting password!", err, err.details)
@@ -301,7 +307,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
   async function confirmPasswordReset(code: string, password: string) {
     try {
-      await auth().confirmPasswordReset(code, password)
+      await app.auth().confirmPasswordReset(code, password)
       return { ok: true }
     } catch (err) {
       console.error("Error while confirming reset password!", err, err.details)
@@ -311,7 +317,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
   async function verifyEmail(code: string) {
     try {
-      await auth().applyActionCode(code)
+      await app.auth().applyActionCode(code)
       return { ok: true }
     } catch (err) {
       console.error("Error while confirming email!", err, err.details)
@@ -320,7 +326,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   function sendVerificationEmail() {
-    return auth().currentUser.sendEmailVerification()
+    return app.auth().currentUser.sendEmailVerification()
   }
 
   return {
