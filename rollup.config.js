@@ -111,7 +111,7 @@ export default [
       resolve({ extensions }),
       // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
       commonjs(),
-      postcss(),
+      postcss({}),
       // typescript(),
       babel({
         babelHelpers: "runtime",
@@ -132,6 +132,6 @@ export default [
       format: "cjs",
       chunkFileNames: "_chunks/[name]-[hash].d.ts",
     },
-    plugins: [postcss(), dts({})],
+    plugins: [postcss({}), dts({})],
   },
 ]
