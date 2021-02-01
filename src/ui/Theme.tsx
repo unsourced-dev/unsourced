@@ -12,8 +12,8 @@ export interface ButtonTheme {
 export interface ButtonsTheme {
   primary: ButtonTheme
   secondary: ButtonTheme
-  ternary: ButtonTheme
-  inverted: ButtonTheme
+  light: ButtonTheme
+  dark: ButtonTheme
   danger: ButtonTheme
   link: ButtonTheme
   icon: ButtonTheme
@@ -84,12 +84,12 @@ export const DEFAULT_THEME: Theme = {
       enabled: "bg-gray-600 hover:bg-gray-700 focus:shadow-outline",
       disabled: "bg-gray-400 cursor-not-allowed",
     },
-    ternary: {
+    light: {
       all: "text-gray-700 font-bold py-2 px-4 rounded shadow-sm inline-block",
       enabled: "bg-white hover:bg-gray-100 focus:shadow-outline",
       disabled: "bg-gray-200 cursor-not-allowed",
     },
-    inverted: {
+    dark: {
       all: "text-white font-bold py-2 px-4 rounded inline-block",
       enabled: "bg-gray-900 hover:bg-gray-700 focus:shadow-outline",
       disabled: "bg-gray-600 text-gray-200 cursor-not-allowed",

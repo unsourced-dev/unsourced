@@ -2,15 +2,7 @@ import cc from "classnames"
 
 import { Theme } from "../Theme"
 
-export type LinkOrButtonStyle =
-  | "primary"
-  | "secondary"
-  | "ternary"
-  | "inverted"
-  | "link"
-  | "icon"
-  | "unstyled"
-  | "danger"
+export type LinkOrButtonStyle = "primary" | "secondary" | "light" | "dark" | "link" | "icon" | "unstyled" | "danger"
 
 export function getLinkOrButtonClassName(
   theme: Theme,
