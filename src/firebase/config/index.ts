@@ -6,6 +6,7 @@ export interface FirebaseConfig {
   storageBucket?: string
   appId?: string
   functionsUrl?: string
+  messagingSenderId?: string
 }
 
 let _config: FirebaseConfig = null
