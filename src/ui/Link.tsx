@@ -4,7 +4,7 @@ import React from "react"
 import { useTheme } from "./Theme"
 import { getLinkOrButtonClassName } from "./utils/getLinkOrButtonClassName"
 
-export type LinkStyle = "primary" | "secondary" | "link" | "icon" | "unstyled"
+export type LinkStyle = "primary" | "secondary" | "ternary" | "inverted" | "link" | "icon" | "unstyled"
 
 export interface LinkProps {
   onClick?(e: React.MouseEvent)

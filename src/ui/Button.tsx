@@ -4,7 +4,7 @@ import { Icon } from "./Icon"
 import { useTheme } from "./Theme"
 import { getLinkOrButtonClassName } from "./utils/getLinkOrButtonClassName"
 
-export type ButtonStyle = "primary" | "secondary" | "link" | "icon" | "unstyled" | "danger"
+export type ButtonStyle = "primary" | "secondary" | "ternary" | "inverted" | "link" | "icon" | "unstyled" | "danger"
 
 export interface ButtonProps {
   style?: ButtonStyle
