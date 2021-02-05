@@ -22,6 +22,9 @@ export interface InputProps {
   autoFocus?: boolean
   maxLength?: number
   defaultValue?: string
+  step?: string | number
+  min?: string | number
+  max?: string | number
 }
 
 export function Input(props: InputProps) {
@@ -38,6 +41,9 @@ export function Input(props: InputProps) {
     placeholder,
     defaultValue,
     maxLength,
+    step,
+    min,
+    max,
   } = props
   const form = useFormFromContext()
   const errorMessage = useErrorMessage({ form, name, error })
@@ -56,6 +62,9 @@ export function Input(props: InputProps) {
         placeholder={placeholder}
         maxLength={maxLength}
         defaultValue={defaultValue}
+        step={step}
+        min={min}
+        max={max}
       />
       <FormFieldError error={errorMessage} />
       <FormFieldHint hint={hint} error={errorMessage} />
