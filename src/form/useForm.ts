@@ -41,8 +41,7 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
         }
       }
     }
-  }
-  if (onSubmit) {
+  } else if (onSubmit) {
     return async (values: Values, form: FormHook<Values>) => {
       // the form is actually a formik form, dirty hack to set the document
       form.document = options.document
