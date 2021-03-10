@@ -3,7 +3,7 @@
   "version": "0.1.9",
   "license": "MIT",
   "scripts": {
-    "npm:publish": "npm run build && npm publish dist",
+    "npm:publish": "npm run build && npm publish ./dist",
     "build": "rimraf dist && rimraf lib && tsc && cpx \"src/**/*.css\" lib && rollup -c && cp package.json dist/package.json",
     "tsc": "tsc --noEmit"
   },
