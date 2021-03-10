@@ -26,6 +26,7 @@ export interface QueryOrderBy {
 }
 
 export interface Query {
+  fields?: string[]
   conditions?: QueryCondition[]
   orderBy?: QueryOrderBy[]
   offset?: number

@@ -156,9 +156,10 @@ export class FirestoreDatabase {
     return decodeDocument(result)
   }
 
-  async get<T = any>(path: string, throwErrorOnNotFound?: boolean): Promise<T & FetchedDocument> {
+  async get<T = any>(path: string, throwErrorOnNotFound?: boolean, fields?: string[]): Promise<T & FetchedDocument> {
     try {
-      const doc = await this.fetch(this.getUrl(path))
+      const query = fields ? { "mask.fieldPaths": fields } : {}
+      const doc = await this.fetch(this.getUrl(path, "", query))
       return decodeDocument<T>(doc)
     } catch (err) {
       if (err.code === 404 && !throwErrorOnNotFound) {
@@ -187,7 +188,7 @@ export class FirestoreDatabase {
   }
 
   set<T = any>(path: string, doc: WithTransform<T>, merge?: boolean): Promise<T> {
-    return this.patch<T>(path, doc, false, merge && getFields(doc))
+    return this.patch<T>(path, doc, undefined, merge && getFields(doc))
   }
 
   update<T = any>(path: string, doc: WithTransform<Partial<T>>): Promise<T> {

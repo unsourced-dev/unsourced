@@ -114,6 +114,7 @@ function getFilters(conditions: QueryCondition[] | undefined): any[] {
 export function encodeQuery(collection: string, query: Query): any {
   return {
     structuredQuery: {
+      select: { fields: query?.fields?.map((fieldPath) => ({ fieldPath })) || [] },
       from: [{ collectionId: collection }],
       where: {
         compositeFilter: {
