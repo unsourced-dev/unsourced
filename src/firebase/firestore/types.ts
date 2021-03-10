@@ -2,6 +2,7 @@ export type QueryOperand =
   | "<"
   | "<="
   | "=="
+  | "!="
   | ">="
   | ">"
   | "array-contains"
