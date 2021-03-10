@@ -186,8 +186,8 @@ export class FirestoreDatabase {
       .filter((doc) => !!doc)
   }
 
-  set<T = any>(path: string, doc: WithTransform<T>): Promise<T> {
-    return this.patch<T>(path, doc)
+  set<T = any>(path: string, doc: WithTransform<T>, merge?: boolean): Promise<T> {
+    return this.patch<T>(path, doc, false, merge && getFields(doc))
   }
 
   update<T = any>(path: string, doc: WithTransform<Partial<T>>): Promise<T> {
