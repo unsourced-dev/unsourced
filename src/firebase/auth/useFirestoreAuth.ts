@@ -19,6 +19,10 @@ function getFirebaseUser() {
 export interface AuthHook<U> {
   user?: U
   firestoreUser?: app.User
+  /** true if firestore auth has been initialized. */
+  initialized: boolean
+  /** true when initializing or doing any auth action (sign in, sign up, ...). */
+  loading: boolean
   signIn(payload: SignInPayload): Promise<SignInResult>
   signUp(payload: SignUpPayload<U>): Promise<SignUpResult>
   signUpWithProvider(payload: SignUpWithProviderPayload<U>): Promise<SignUpResult>
@@ -120,6 +124,7 @@ export function getCachedUser<U>(): U {
 export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
   const [user, setUser] = useState<U>(CACHE.user)
   const firestoreUser = useRef<app.User>(getFirebaseUser())
+  const [initialized, setInitialized] = useState<boolean>(false)
   const logger = useLogger()
 
   // do this blocking to set the config ASAP
@@ -141,9 +146,13 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       if (options.onAuthStateChange) {
         options.onAuthStateChange(newUser)
       }
+      setInitialized(true)
       logger.setLoading(false)
     })
-    setTimeout(() => logger.setLoading(false), 1000)
+    setTimeout(() => {
+      setInitialized(true)
+      logger.setLoading(false)
+    }, 500)
 
     return () => unsubscribe()
   }, [])
@@ -332,6 +341,8 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   return {
     user,
     firestoreUser: firestoreUser.current,
+    initialized,
+    loading: !initialized || logger.loading,
     signIn,
     signUp,
     signUpWithProvider,
