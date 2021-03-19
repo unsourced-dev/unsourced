@@ -75,7 +75,7 @@ export function useForm<Values = any>(options: UseFormOptions<Values> = {}): For
   const onSubmit = useMemo<any>(() => getOnSubmit(options, logger), [options.document, options.onSubmit])
   const initialValues: any = options.initialValues || (options.document && options.document.values) || {}
   const formik = useFormik({ ...options, onSubmit, initialValues })
-  useConfirmOnLeave(!formik.isSubmitting && formik.dirty)
+  useConfirmOnLeave(options.warnOnExitDirty && !formik.isSubmitting && formik.dirty)
 
   if (options.document) {
     options.document.setForm(formik)

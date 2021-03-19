@@ -1,6 +1,4 @@
-import {
-    FieldHelperProps, FieldInputProps, FieldMetaProps, FormikConfig, FormikState
-} from "formik"
+import { FieldHelperProps, FieldInputProps, FieldMetaProps, FormikConfig, FormikState } from "formik"
 import { ChangeEvent, FormEvent } from "react"
 
 import { StringMap } from "../types"
@@ -28,6 +26,7 @@ export interface UseFormOptions<Values> extends Omit<FormikConfig<Values>, "onSu
   onSubmit?(values: Values, form: FormHook<Values>): void | SubmitResult | Promise<void | SubmitResult>
   notifyOnSuccess?: string
   notifyOnError?: string
+  warnOnExitDirty?: boolean
 }
 
 export interface NestedStringMap<T> {
