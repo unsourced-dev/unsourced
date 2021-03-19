@@ -121,11 +121,19 @@ export function getCachedUser<U>(): U {
   return CACHE.user
 }
 
+interface FirestoreAuthState<U> {
+  initialized: boolean
+  firebaseUser: app.User
+  user: U
+}
+
 export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
-  const [user, setUser] = useState<U>(CACHE.user)
-  const firestoreUser = useRef<app.User>(getFirebaseUser())
-  const [initialized, setInitialized] = useState<boolean>(false)
   const logger = useLogger()
+  const [state, setState] = useState<FirestoreAuthState<U>>(() => ({
+    initialized: !!CACHE.user,
+    user: CACHE.user,
+    firebaseUser: getFirebaseUser(),
+  }))
 
   // do this blocking to set the config ASAP
   if (!isFirebaseInitialized()) {
@@ -140,17 +148,15 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       }
 
       const newUser = u ? await options.getUser(u) : null
-      firestoreUser.current = u
-      setUser(newUser)
+      setState({ user: newUser, firebaseUser: u, initialized: true })
       setUserInCache(newUser)
+      logger.setLoading(false)
       if (options.onAuthStateChange) {
         options.onAuthStateChange(newUser)
       }
-      setInitialized(true)
-      logger.setLoading(false)
     })
     setTimeout(() => {
-      setInitialized(true)
+      setState((state) => ({ ...state, initialized: true }))
       logger.setLoading(false)
     }, 500)
 
@@ -160,7 +166,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   async function signIn(payload: SignInPayload): Promise<SignInResult> {
     const { email, password, keepMeSignedIn } = payload
 
-    setUser(null)
+    setState((state) => ({ ...state, user: null }))
     setUserInCache(null)
     await logger.setLoading(true)
     try {
@@ -194,7 +200,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
         credentials = await app.auth().currentUser.linkWithCredential(cred)
       } else {
         isCreatingNewUser = true
-        setUser(null)
+        setState((state) => ({ ...state, user: null }))
         setUserInCache(null)
         credentials = await app.auth().createUserWithEmailAndPassword(email, password)
       }
@@ -206,14 +212,14 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     }
 
     try {
-      firestoreUser.current = app.auth().currentUser
+      const firebaseUser = app.auth().currentUser
       const newUser = await payload.getUser({
         user: credentials.user,
         payload: payload.createUserPayload,
         credentials,
-        existing: user,
+        existing: state.user,
       })
-      setUser(newUser)
+      setState({ initialized: true, user: newUser, firebaseUser })
       setUserInCache(newUser)
       await logger.setLoading(false)
 
@@ -256,7 +262,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
         credentials = await app.auth().currentUser.linkWithPopup(provider)
       } else {
         isCreatingNewUser = true
-        setUser(null)
+        setState((state) => ({ ...state, user: null }))
         setUserInCache(null)
         credentials = await app.auth().signInWithPopup(provider)
       }
@@ -269,14 +275,14 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     }
 
     try {
-      firestoreUser.current = app.auth().currentUser
+      const firebaseUser = app.auth().currentUser
       const newUser = await payload.getUser({
         user: credentials.user,
         payload: payload.createUserPayload,
         credentials,
-        existing: user,
+        existing: state.user,
       })
-      setUser(newUser)
+      setState({ initialized: true, user: newUser, firebaseUser })
       setUserInCache(newUser)
       await logger.setLoading(false)
 
@@ -299,7 +305,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   function signOut() {
-    setUser(null)
+    setState({ ...state, user: null })
     setUserInCache(null)
     return app.auth().signOut()
   }
@@ -339,10 +345,10 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   return {
-    user,
-    firestoreUser: firestoreUser.current,
-    initialized,
-    loading: !initialized || logger.loading,
+    user: state.user,
+    firestoreUser: state.firebaseUser,
+    initialized: state.initialized,
+    loading: !state.initialized || logger.loading,
     signIn,
     signUp,
     signUpWithProvider,
@@ -352,7 +358,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     sendVerificationEmail,
     confirmPasswordReset,
     setUser(user: U) {
-      setUser(user)
+      setState((state) => ({ ...state, user }))
       setUserInCache(user)
     },
   }
