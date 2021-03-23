@@ -158,7 +158,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     })
     setTimeout(() => {
       setState((state) => ({ ...state, initialized: true, loading: false }))
-    }, 500)
+    }, 2000)
 
     return () => unsubscribe()
   }, [])
