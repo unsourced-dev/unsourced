@@ -15,8 +15,8 @@ export interface LoggerHook {
   addNotification(notification: Notification)
 }
 
-function _useLogger() {
-  const [loading, setLoading] = useState(false)
+function _useLogger(defaultLoading?: boolean) {
+  const [loading, setLoading] = useState(defaultLoading || false)
   const [notifications, setNotifications] = useState<Notification[]>([])
 
   return {
@@ -34,7 +34,7 @@ function _useLogger() {
   }
 }
 
-const Logger = createContainer<LoggerHook>(_useLogger)
+const Logger = createContainer<LoggerHook, boolean>(_useLogger)
 
 export const useLogger = Logger.useContainer
 

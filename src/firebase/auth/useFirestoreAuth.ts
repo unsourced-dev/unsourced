@@ -123,6 +123,7 @@ export function getCachedUser<U>(): U {
 
 interface FirestoreAuthState<U> {
   initialized: boolean
+  loading: boolean
   firebaseUser: app.User
   user: U
 }
@@ -131,6 +132,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   const logger = useLogger()
   const [state, setState] = useState<FirestoreAuthState<U>>(() => ({
     initialized: !!CACHE.user,
+    loading: !!CACHE.user,
     user: CACHE.user,
     firebaseUser: getFirebaseUser(),
   }))
@@ -141,43 +143,44 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   }
 
   useEffect(() => {
-    logger.setLoading(true)
+    setState((state) => ({ ...state, loading: true }))
     const unsubscribe = app.auth().onAuthStateChanged(async (u) => {
       if (isSigningUp) {
         return
       }
 
       const newUser = u ? await options.getUser(u) : null
-      setState({ user: newUser, firebaseUser: u, initialized: true })
+      setState({ user: newUser, firebaseUser: u, initialized: true, loading: false })
       setUserInCache(newUser)
-      logger.setLoading(false)
       if (options.onAuthStateChange) {
         options.onAuthStateChange(newUser)
       }
     })
     setTimeout(() => {
-      setState((state) => ({ ...state, initialized: true }))
-      logger.setLoading(false)
+      setState((state) => ({ ...state, initialized: true, loading: false }))
     }, 500)
 
     return () => unsubscribe()
   }, [])
 
+  const setLoading = logger.setLoading
+  useEffect(() => {
+    setLoading(state.loading)
+  }, [setLoading, state.loading])
+
   async function signIn(payload: SignInPayload): Promise<SignInResult> {
     const { email, password, keepMeSignedIn } = payload
 
-    setState((state) => ({ ...state, user: null }))
+    setState((state) => ({ ...state, user: null, loading: true }))
     setUserInCache(null)
-    await logger.setLoading(true)
     try {
       await app
         .auth()
         .setPersistence(keepMeSignedIn ? app.auth.Auth.Persistence.LOCAL : app.auth.Auth.Persistence.SESSION)
       await app.auth().signInWithEmailAndPassword(email, password)
-      await logger.setLoading(false)
       return {}
     } catch (err) {
-      await logger.setLoading(false)
+      setState((state) => ({ ...state, loading: false }))
       return convertAuthError(err)
     }
   }
@@ -185,7 +188,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   async function signUp(payload: SignUpPayload<U>): Promise<SignUpResult> {
     const { email, password, keepMeSignedIn } = payload
 
-    logger.setLoading(true)
+    setState((state) => ({ ...state, loading: true }))
     isSigningUp = true
     let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
@@ -207,7 +210,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       isSigningUp = false
     } catch (err) {
       isSigningUp = false
-      await logger.setLoading(false)
+      setState((state) => ({ ...state, loading: false }))
       return convertAuthError(err)
     }
 
@@ -219,9 +222,8 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
         credentials,
         existing: state.user,
       })
-      setState({ initialized: true, user: newUser, firebaseUser })
+      setState({ initialized: true, user: newUser, firebaseUser, loading: false })
       setUserInCache(newUser)
-      await logger.setLoading(false)
 
       if (options.sendVerificationEmail) {
         await credentials.user.sendEmailVerification()
@@ -230,8 +232,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       return { ok: true }
     } catch (err) {
       console.error("Error while creating user documents: ", err, err.details)
-
-      logger.setLoading(false)
+      setState((state) => ({ ...state, loading: false }))
 
       if (isCreatingNewUser) {
         try {
@@ -248,7 +249,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
   async function signUpWithProvider(payload: SignUpWithProviderPayload<U>): Promise<SignUpResult> {
     const { provider, keepMeSignedIn } = payload
 
-    logger.setLoading(true)
+    setState((state) => ({ ...state, loading: true }))
     isSigningUp = true
     let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
@@ -270,7 +271,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     } catch (err) {
       isSigningUp = false
       console.error("Got error on Provider signup.", err)
-      await logger.setLoading(false)
+      setState((state) => ({ ...state, loading: false }))
       return convertAuthError(err)
     }
 
@@ -282,15 +283,13 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
         credentials,
         existing: state.user,
       })
-      setState({ initialized: true, user: newUser, firebaseUser })
+      setState({ initialized: true, user: newUser, firebaseUser, loading: false })
       setUserInCache(newUser)
-      await logger.setLoading(false)
 
       return { ok: true }
     } catch (err) {
       console.error("Error while creating user documents: ", err, err.details)
-
-      logger.setLoading(false)
+      setState((state) => ({ ...state, loading: false }))
 
       if (isCreatingNewUser) {
         try {
