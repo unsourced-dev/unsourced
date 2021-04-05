@@ -18,7 +18,7 @@ export function useFile(filename: string): FileHook {
   const [loading, setLoading] = useState(false)
   const [downloadUrl, setDownloadUrl] = useState<string | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
-  const ref = firebase.storage().ref(filename)
+  const ref = firebase.app().storage().ref(filename)
 
   useEffect(() => {
     setLoading(true)

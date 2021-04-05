@@ -18,7 +18,7 @@ export type Method = "GET" | "POST" | "PUT" | "DELETE"
 export async function getAuthHeaders(json?: boolean, headers: StringMap<string> = {}): Promise<StringMap<string>> {
   // check firebase is initialized
   if (firebase.apps.length) {
-    const user = firebase.auth().currentUser
+    const user = firebase.app().auth().currentUser
     if (user) {
       const idToken = await user.getIdToken()
       headers.Authorization = "Bearer " + idToken
