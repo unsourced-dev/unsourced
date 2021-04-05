@@ -1,6 +1,6 @@
 {
   "name": "unsourced",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "license": "MIT",
   "scripts": {
     "npm:publish": "npm run build && npm publish ./dist",
@@ -51,7 +51,7 @@
     "@types/react": "16.9.36",
     "classnames": "2.2.6",
     "cpx": "1.5.0",
-    "firebase": "8.2.1",
+    "firebase": "8.3.2",
     "formik": "2.2.6",
     "next": "10.0.5",
     "prettier": "2.0.5",
