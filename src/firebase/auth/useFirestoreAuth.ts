@@ -11,7 +11,7 @@ import { convertAuthError } from "./convertAuthError"
 
 function getFirebaseUser() {
   if (isFirebaseInitialized()) {
-    return app.auth().currentUser
+    return app.app().auth().currentUser
   }
   return undefined
 }
