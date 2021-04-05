@@ -1,4 +1,5 @@
 import firebase from "firebase/app"
+import "firebase/app"
 
 import { StringMap } from "../../types"
 import { config } from "../config"
