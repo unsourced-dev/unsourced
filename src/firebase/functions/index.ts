@@ -1,5 +1,5 @@
 import firebase from "firebase/app"
-import "firebase/app"
+import "firebase/auth"
 
 import { StringMap } from "../../types"
 import { config } from "../config"
@@ -19,7 +19,7 @@ export type Method = "GET" | "POST" | "PUT" | "DELETE"
 export async function getAuthHeaders(json?: boolean, headers: StringMap<string> = {}): Promise<StringMap<string>> {
   // check firebase is initialized
   if (firebase.apps.length) {
-    const user = firebase.app().auth().currentUser
+    const user = firebase.auth().currentUser
     if (user) {
       const idToken = await user.getIdToken()
       headers.Authorization = "Bearer " + idToken

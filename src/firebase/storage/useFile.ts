@@ -1,4 +1,6 @@
 import firebase from "firebase/app"
+import "firebase/storage"
+
 import { useEffect, useState } from "react"
 
 // not used at the moment
@@ -18,7 +20,7 @@ export function useFile(filename: string): FileHook {
   const [loading, setLoading] = useState(false)
   const [downloadUrl, setDownloadUrl] = useState<string | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
-  const ref = firebase.app().storage().ref(filename)
+  const ref = firebase.storage().ref(filename)
 
   useEffect(() => {
     setLoading(true)

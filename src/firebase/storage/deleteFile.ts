@@ -6,7 +6,7 @@ import firebase from "firebase/app"
 export async function deleteFile(path: string) {
   if (!path) return
   try {
-    const ref = firebase.app().storage().ref(path)
+    const ref = firebase.storage().ref(path)
     await ref.delete()
   } catch (_) {
     // swallow the error

@@ -1,4 +1,5 @@
 import firebase from "firebase/app"
+import "firebase/storage"
 
 import { guid } from "../../utils/guid"
 
@@ -37,7 +38,7 @@ export interface UploadFileOptions {
  */
 export async function uploadFile(file: File, options: UploadFileOptions): Promise<UploadFileResult> {
   const path = getFilePath(file, options)
-  const ref = firebase.app().storage().ref(path)
+  const ref = firebase.storage().ref(path)
 
   await ref.put(file, {
     cacheControl: "public,max-age=31536000",
@@ -53,7 +54,7 @@ export interface UploadBlobPayload {
 
 export async function uploadBlob(payload: UploadBlobPayload) {
   const { blob, path, contentType } = payload
-  const ref = firebase.app().storage().ref(path)
+  const ref = firebase.storage().ref(path)
 
   await ref.put(blob, {
     cacheControl: "public,max-age=31536000",
