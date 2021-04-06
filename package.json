@@ -1,6 +1,6 @@
 {
   "name": "unsourced",
-  "version": "0.1.20",
+  "version": "0.1.22",
   "license": "MIT",
   "scripts": {
     "npm:publish": "npm run build && npm publish ./dist",
