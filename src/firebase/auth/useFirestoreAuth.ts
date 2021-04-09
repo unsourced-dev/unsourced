@@ -102,6 +102,10 @@ export interface UseFirestoreAuthPayload<U> {
   sendVerificationEmail?: boolean
 }
 
+export interface WithId {
+  id: string
+}
+
 interface Cache {
   user: any
 }
@@ -116,7 +120,7 @@ function setUserInCache(user: any) {
   CACHE.user = user
 }
 
-export function getCachedUser<U>(): U {
+export function getCachedUser<U extends WithId>(): U {
   return CACHE.user
 }
 
@@ -127,7 +131,7 @@ interface FirestoreAuthState<U> {
   user: U
 }
 
-export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
+export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
   const [state, setState] = useState<FirestoreAuthState<U>>(() => ({
     initialized: !!CACHE.user,
     loading: !CACHE.user,
@@ -146,6 +150,10 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
       if (isSigningUp) {
         return
       }
+
+      // firebase calls this on every page even with a soft client-side page-change...
+      // make sure we only fetch if there is no user.
+      if (u && u?.uid === CACHE.user?.id) return
 
       const newUser = u ? await options.getUser(u) : null
       setState({ user: newUser, firebaseUser: u, initialized: true, loading: false })
