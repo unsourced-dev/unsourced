@@ -3,7 +3,6 @@ import "firebase/auth"
 
 import { useEffect, useRef, useState } from "react"
 
-import { useLogger } from "../../utils/logger/useLogger"
 import { FirebaseConfig } from "../config"
 import { initialize } from "../init/initialize"
 import { isFirebaseInitialized } from "../init/isFirebaseInitialized"
@@ -129,10 +128,9 @@ interface FirestoreAuthState<U> {
 }
 
 export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHook<U> {
-  const logger = useLogger()
   const [state, setState] = useState<FirestoreAuthState<U>>(() => ({
     initialized: !!CACHE.user,
-    loading: !!CACHE.user,
+    loading: !CACHE.user,
     user: CACHE.user,
     firebaseUser: getFirebaseUser(),
   }))
@@ -162,11 +160,6 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
 
     return () => unsubscribe()
   }, [])
-
-  const setLoading = logger.setLoading
-  useEffect(() => {
-    setLoading(state.loading)
-  }, [setLoading, state.loading])
 
   async function signIn(payload: SignInPayload): Promise<SignInResult> {
     const { email, password, keepMeSignedIn } = payload
@@ -347,7 +340,7 @@ export function useFirestoreAuth<U>(options: UseFirestoreAuthPayload<U>): AuthHo
     user: state.user,
     firestoreUser: state.firebaseUser,
     initialized: state.initialized,
-    loading: !state.initialized || logger.loading,
+    loading: !state.initialized,
     signIn,
     signUp,
     signUpWithProvider,
