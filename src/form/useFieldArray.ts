@@ -7,7 +7,7 @@ export interface FieldArrayHook<T> {
   form: FormHook<any>
   name: string
   values: T[]
-  push(value: T): void
+  push(...values: T[]): void
   swap(index1: number, index2: number): void
   insert(index: number, value: T): void
   update(index: number, value: T): void
@@ -24,8 +24,8 @@ export function useFieldArray<T>(form: FormHook<any>, name: string): FieldArrayH
   const values: T[] = getIn(form.values, name) || []
 
   const push = useCallback(
-    (value: T) => {
-      form.setFieldValue(name, values.concat(value))
+    (..._values: T[]) => {
+      form.setFieldValue(name, values.concat(_values))
     },
     [values, form.setFieldValue]
   )
