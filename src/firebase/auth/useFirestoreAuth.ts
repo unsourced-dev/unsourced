@@ -100,6 +100,7 @@ export interface UseFirestoreAuthPayload<U> {
   getUser(user: app.User): Promise<U>
   onAuthStateChange?(user: U | undefined): void
   sendVerificationEmail?: boolean
+  firebaseInitTimeout?: number
 }
 
 export interface WithId {
@@ -140,6 +141,7 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
   // we're keeping track here if the user is currently signing up, and if so
   // we ignore the call to onAuthStateChanged()
   const isSigningUp = useRef(false)
+  const initTimeout = useRef(null)
 
   // do this blocking to set the config ASAP
   if (!isFirebaseInitialized()) {
@@ -153,6 +155,8 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
         return
       }
 
+      if (initTimeout.current !== null) clearTimeout(initTimeout.current)
+
       // firebase calls this on every page even with a soft client-side page-change...
       // make sure we only fetch if there is no user.
       if (u && u?.uid === CACHE.user?.id) return
@@ -164,9 +168,14 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
         options.onAuthStateChange(newUser)
       }
     })
-    setTimeout(() => {
-      setState((state) => ({ ...state, initialized: true, loading: false }))
-    }, 2000)
+    if (typeof options.firebaseInitTimeout !== "number" || options.firebaseInitTimeout > 0) {
+      initTimeout.current = setTimeout(() => {
+        setState((state) => {
+          if (state.initialized) return state
+          return { ...state, initialized: true, loading: false }
+        })
+      }, options.firebaseInitTimeout ?? 4000)
+    }
 
     return () => unsubscribe()
   }, [])
