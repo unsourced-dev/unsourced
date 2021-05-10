@@ -112,8 +112,6 @@ interface Cache {
 
 const CACHE: Cache = { user: null }
 
-let isSigningUp = false
-
 function setUserInCache(user: any) {
   // only cache on client
   if (typeof window === "undefined") return
@@ -138,6 +136,10 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
     user: CACHE.user,
     firebaseUser: getFirebaseUser(),
   }))
+  // firebase calls onAuthStateChanged() on sign up, since we do not want this
+  // we're keeping track here if the user is currently signing up, and if so
+  // we ignore the call to onAuthStateChanged()
+  const isSigningUp = useRef(false)
 
   // do this blocking to set the config ASAP
   if (!isFirebaseInitialized()) {
@@ -147,7 +149,7 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
   useEffect(() => {
     setState((state) => ({ ...state, loading: true }))
     const unsubscribe = app.auth().onAuthStateChanged(async (u) => {
-      if (isSigningUp) {
+      if (isSigningUp.current) {
         return
       }
 
@@ -190,7 +192,7 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
     const { email, password, keepMeSignedIn } = payload
 
     setState((state) => ({ ...state, loading: true }))
-    isSigningUp = true
+    isSigningUp.current = true
     let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
 
@@ -208,9 +210,9 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
         setUserInCache(null)
         credentials = await app.auth().createUserWithEmailAndPassword(email, password)
       }
-      isSigningUp = false
+      isSigningUp.current = false
     } catch (err) {
-      isSigningUp = false
+      isSigningUp.current = false
       setState((state) => ({ ...state, loading: false }))
       return convertAuthError(err)
     }
@@ -251,7 +253,7 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
     const { provider, keepMeSignedIn } = payload
 
     setState((state) => ({ ...state, loading: true }))
-    isSigningUp = true
+    isSigningUp.current = true
     let credentials: app.auth.UserCredential = null
     let isCreatingNewUser = false
 
@@ -268,9 +270,9 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
         setUserInCache(null)
         credentials = await app.auth().signInWithPopup(provider)
       }
-      isSigningUp = false
+      isSigningUp.current = false
     } catch (err) {
-      isSigningUp = false
+      isSigningUp.current = false
       console.error("Got error on Provider signup.", err)
       setState((state) => ({ ...state, loading: false }))
       return convertAuthError(err)
