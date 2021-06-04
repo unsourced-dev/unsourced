@@ -1,9 +1,9 @@
 {
   "name": "unsourced",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "license": "MIT",
   "scripts": {
-    "npm:publish": "npm run build && npm publish ./dist",
+    "release": "npm run build && npm publish ./dist",
     "build": "rimraf dist && rimraf lib && tsc && cpx \"src/**/*.css\" lib && rollup -c && cp package.json dist/package.json",
     "tsc": "tsc --noEmit"
   },
