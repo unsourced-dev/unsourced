@@ -1,16 +1,16 @@
 import { useFormik } from "formik"
-import { useMemo } from "react"
+import { MutableRefObject, useMemo, useRef } from "react"
 
 import { LoggerHook, useLogger } from "../utils/logger/useLogger"
 import { useConfirmOnLeave } from "../utils/useConfirmOnLeave"
 import { FormHook, UseFormOptions } from "./types"
 
-function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook) {
-  const { onSubmit, document, notifyOnSuccess, notifyOnError } = options || {}
+function getOnSubmit<Values>(optionsRef: MutableRefObject<UseFormOptions<Values>>, logger: LoggerHook) {
+  const { onSubmit, document, notifyOnSuccess, notifyOnError } = optionsRef.current || {}
   if (document) {
     return async (values: Values, form: FormHook<Values>) => {
       // the form is actually a formik form, dirty hack to set the document
-      form.document = options.document
+      form.document = document
       try {
         form.setStatus(undefined)
         await document.set(values)
@@ -44,7 +44,7 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
   } else if (onSubmit) {
     return async (values: Values, form: FormHook<Values>) => {
       // the form is actually a formik form, dirty hack to set the document
-      form.document = options.document
+      form.document = document
       try {
         const result = await onSubmit(values, form)
 
@@ -72,7 +72,11 @@ function getOnSubmit<Values>(options: UseFormOptions<Values>, logger: LoggerHook
 
 export function useForm<Values = any>(options: UseFormOptions<Values> = {}): FormHook<Values> {
   const logger = useLogger()
-  const onSubmit = useMemo<any>(() => getOnSubmit(options, logger), [options.document, options.onSubmit])
+
+  const optionsRef = useRef<UseFormOptions<Values>>(options)
+  optionsRef.current = options
+
+  const onSubmit = useMemo<any>(() => getOnSubmit(optionsRef, logger), [optionsRef])
   const initialValues: any = options.initialValues || (options.document && options.document.values) || {}
   const formik = useFormik({ ...options, onSubmit, initialValues })
   useConfirmOnLeave(options.warnOnExitDirty && !formik.isSubmitting && formik.dirty)

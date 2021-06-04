@@ -20,10 +20,14 @@ export interface FormHookDocument<Values = any> {
   setForm(form: any) // should be FormikHook, but they didn't type it...
 }
 
+export interface OnSubmit<Values> {
+  (values: Values, form: FormHook<Values>): void | SubmitResult | Promise<void | SubmitResult>
+}
+
 export interface UseFormOptions<Values> extends Omit<FormikConfig<Values>, "onSubmit" | "initialValues"> {
   initialValues?: Values
   document?: FormHookDocument<Values>
-  onSubmit?(values: Values, form: FormHook<Values>): void | SubmitResult | Promise<void | SubmitResult>
+  onSubmit?: OnSubmit<Values>
   notifyOnSuccess?: string
   notifyOnError?: string
   warnOnExitDirty?: boolean
