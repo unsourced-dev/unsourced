@@ -31,6 +31,7 @@ export interface AuthHook<U> {
   verifyEmail(code: string): Promise<VerifyEmailResult>
   sendVerificationEmail(): Promise<void>
   setUser(user: U)
+  deleteUser(): Promise<DeleteUserResult>
 }
 
 export interface SignInPayload {
@@ -49,6 +50,11 @@ export interface SignInResult {
 }
 
 export interface VerifyEmailResult {
+  ok: boolean
+  error?: string
+}
+
+export interface DeleteUserResult {
   ok: boolean
   error?: string
 }
@@ -355,6 +361,18 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
     return app.auth().currentUser.sendEmailVerification()
   }
 
+  async function deleteUser() {
+    try {
+      await app.auth().currentUser.delete()
+      setState({ ...state, user: null })
+      setUserInCache(null)
+      return { ok: true }
+    } catch (err) {
+      console.error("Error while confirming email!", err, err.details)
+      return { ok: false, error: err.message || err }
+    }
+  }
+
   return {
     user: state.user,
     firestoreUser: state.firebaseUser,
@@ -368,6 +386,7 @@ export function useFirestoreAuth<U extends WithId>(options: UseFirestoreAuthPayl
     sendPasswordResetEmail,
     sendVerificationEmail,
     confirmPasswordReset,
+    deleteUser,
     setUser(user: U) {
       setState((state) => ({ ...state, user }))
       setUserInCache(user)
