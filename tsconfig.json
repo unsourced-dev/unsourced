@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitReturns": true,
+    "useUnknownInCatchVariables": false,
     "outDir": "lib",
     "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,

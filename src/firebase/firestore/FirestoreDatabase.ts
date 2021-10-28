@@ -93,7 +93,7 @@ export class FirestoreDatabase {
         const details = await result.json()
 
         const message = result.statusText
-        const error: any = new Error(`Error ${result.status}: ${message}`)
+        const error: any = new Error(`Error ${result.status}: ${message} - details: ${JSON.stringify(details)}`)
         error.details = getDetailsMessage(details)
         error.code = result.status
         throw error
